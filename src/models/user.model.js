@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../config/db.config.js";
 import { hashPassword } from "../helpers/password.helpers.js";
+import { ROLE } from "../constants/role.constants.js";
 
 const User = sequelize.define("User",
 	{
@@ -24,7 +25,7 @@ const User = sequelize.define("User",
 		role: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			defaultValue: "EMPLOYEE",
+			defaultValue: ROLE.EMPLOYEE,
 		},
 	}, {
 	hooks: {

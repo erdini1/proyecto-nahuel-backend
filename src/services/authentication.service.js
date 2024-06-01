@@ -6,7 +6,7 @@ import { userRepository } from "../repositories/user.repository.js";
 
 const create = async (userData) => {
 	try {
-		const { firstName, lastName, number, password } = userData;
+		const { firstName, lastName, number, password, role } = userData;
 
 		const user = await userRepository.findUserByNumber(number);
 		if (user) throw new ApiError("El numero de empleado ya se encuentra registrado", HTTP_STATUSES.BAD_REQUEST)
@@ -15,7 +15,8 @@ const create = async (userData) => {
 			firstName,
 			lastName,
 			number,
-			password
+			password,
+			role
 		});
 	} catch (error) {
 		throw error

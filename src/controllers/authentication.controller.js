@@ -21,7 +21,7 @@ const login = async (req, res, next) => {
 
 const forgotPassword = async (req, res, next) => {
 	try {
-		const user = await authenticationService.forgotPassword(req.body);
+		const user = await authenticationService.forgotPassword(req.params.userNumber, req.body);
 		res.status(HTTP_STATUSES.OK).json(user);
 	} catch (error) {
 		next(error)
@@ -30,5 +30,6 @@ const forgotPassword = async (req, res, next) => {
 
 export const authenticationController = {
 	create,
-	login
+	login,
+	forgotPassword
 }

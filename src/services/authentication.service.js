@@ -49,11 +49,11 @@ const login = async (userData) => {
 
 // TODO: Ver bien los temas de Seguridad, solo el administrador debe poder cambiar la contraseña de un empleado.
 // TODO: Impelementar middleware para verificar roles de usuario.
-const forgotPassword = async (userData) => {
-	const { number, password } = userData;
-	const user = await userRepository.findUserByNumber(number);
+const forgotPassword = async (userNumber, userData) => {
+	const { password } = userData;
+	const user = await userRepository.findUserByNumber(userNumber);
 	if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
-	user.password = hashPassword(password);
+	user.password = await hashPassword(password);
 	await userRepository.save(user);
 	return user;
 }

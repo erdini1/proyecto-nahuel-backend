@@ -23,3 +23,15 @@
 [31/5/2024, 21:43:05] ERROR: {"status":400,"message":"No existe el recurso solicitado /api/auth/register","method":"POST","route":"/api/auth/register","body":{"firstName":"Dylan","lastName":"Erdini","number":"123","password":"tintin123"},"params":{},"query":{}}
 [31/5/2024, 21:43:20] ERROR: {"status":500,"message":"No existe el recurso solicitado /api/auth/login","method":"POST","route":"/api/auth/login","body":{"number":"123","password":"tintin123"},"params":{},"query":{}}
 [31/5/2024, 21:43:35] ERROR: {"status":500,"message":"No existe el recurso solicitado /api/auth/login","method":"POST","route":"/api/auth/login","body":{"number":"123","password":"tintin123"},"params":{},"query":{}}
+[1/6/2024, 17:12:01] ERROR: {"status":404,"message":"No existe el recurso solicitado /api/nahuel","method":"GET"}
+[1/6/2024, 17:12:02] ERROR: {"status":404,"message":"No existe el recurso solicitado /favicon.ico","method":"GET"}
+[1/6/2024, 17:13:01] ERROR: {"status":404,"message":"No existe el recurso solicitado /api/auth/forgot-password","method":"POST"}
+[1/6/2024, 17:13:55] ERROR: {"status":500,"message":"No existe el recurso solicitado /api/auth/forgot-password","method":"POST","route":"/api/auth/forgot-password","body":{"password":"tintin"},"params":{},"query":{}}
+[1/6/2024, 17:18:02] ERROR: {"status":404,"message":"No existe el recurso solicitado /api/auth/forgot-password","method":"POST"}
+[1/6/2024, 17:18:26] ERROR: {"status":500,"message":"No existe el recurso solicitado /api/auth/forgot-password/012","method":"POST","route":"/api/auth/forgot-password/012","body":{"password":"tintin"},"params":{},"query":{}}
+[1/6/2024, 17:26:04] ERROR: {"status":404,"message":"No existe el recurso solicitado /api/auth/forgot-password/012","method":"POST","route":"/api/auth/forgot-password/012","body":{"password":"tintin"},"params":{},"query":{}}
+[1/6/2024, 17:26:09] ERROR: {"status":500,"message":"No existe el recurso solicitado /api/auth/forgot-password/123","method":"POST","route":"/api/auth/forgot-password/123","body":{"password":"tintin"},"params":{},"query":{}}
+[1/6/2024, 17:27:57] ERROR: {"status":500,"message":"No existe el recurso solicitado /api/auth/forgot-password/123","method":"POST","route":"/api/auth/forgot-password/123","body":{"password":"tintin"},"params":{},"query":{}}
+[1/6/2024, 17:28:31] ERROR: {"status":500,"message":"No existe el recurso solicitado /api/auth/forgot-password/123","method":"POST","route":"/api/auth/forgot-password/123","body":{"password":"tintin"},"params":{},"query":{}}
+[1/6/2024, 17:29:06] ERROR: {"status":500,"message":"No existe el recurso solicitado /api/auth/forgot-password/123","method":"POST","route":"/api/auth/forgot-password/123","body":{"password":"tintin"},"params":{},"query":{}}
+[1/6/2024, 17:32:43] ERROR: {"status":401,"message":"No existe el recurso solicitado /api/auth/login","method":"POST","route":"/api/auth/login","body":{"number":"123","password":"tintin123"},"params":{},"query":{}}

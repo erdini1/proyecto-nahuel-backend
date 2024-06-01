@@ -21,11 +21,11 @@ const findUserByNumber = async (number) => {
 			number
 		}
 	})
-	return user?.dataValues
+	return user
 }
 
-const save = async (userData) => {
-	await User.save(userData)
+const save = async (user) => {
+	await user.save()
 }
 
 export const userRepository = {

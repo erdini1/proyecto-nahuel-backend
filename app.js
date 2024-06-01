@@ -48,7 +48,6 @@ app.use((err, req, res, next) => {
 			message: `No existe el recurso solicitado ${req.originalUrl}`,
 			method: req.method,
 			route: req.originalUrl,
-			body: req.body,
 			params: req.params,
 			query: req.query
 		}));
@@ -59,7 +58,6 @@ app.use((err, req, res, next) => {
 			message: `No existe el recurso solicitado ${req.originalUrl}`,
 			method: req.method,
 			route: req.originalUrl,
-			body: req.body,
 			params: req.params,
 			query: req.query
 		}));

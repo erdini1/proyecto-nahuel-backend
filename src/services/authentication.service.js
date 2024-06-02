@@ -49,7 +49,6 @@ const login = async (userData) => {
 }
 
 // TODO: Ver bien los temas de Seguridad, solo el administrador debe poder cambiar la contraseña de un empleado.
-// TODO: Impelementar middleware para verificar roles de usuario.
 const forgotPassword = async (userNumber, userData) => {
 	const { password } = userData;
 	const user = await userRepository.findUserByNumber(userNumber);

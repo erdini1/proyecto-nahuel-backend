@@ -5,16 +5,6 @@ const create = async (userData) => {
 	return user?.dataValues
 }
 
-const findUserByNumberAndPassword = async (number, password) => {
-	const user = await User.findOne({
-		where: {
-			number,
-			password
-		}
-	})
-	return user?.dataValues
-}
-
 const findUserByNumber = async (number) => {
 	const user = await User.findOne({
 		where: {
@@ -30,7 +20,6 @@ const save = async (user) => {
 
 export const userRepository = {
 	create,
-	findUserByNumberAndPassword,
 	findUserByNumber,
 	save
 }

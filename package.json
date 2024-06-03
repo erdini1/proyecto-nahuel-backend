@@ -21,11 +21,12 @@
   },
   "homepage": "https://github.com/erdini1/proyecto-nahuel-backend#readme",
   "dependencies": {
-    "express": "^4.19.2",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "csurf": "^1.11.0",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.7",
     "sequelize": "^6.37.3"

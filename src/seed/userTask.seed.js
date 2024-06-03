@@ -58,18 +58,18 @@ const userTasks = [
 	{
 		id: 8,
 		userId: 3,
-		taskId: 5,
+		taskId: 2,
 		isCompleted: false,
 		shift: "Noche",
-		createdAt: "2024-06-02",
+		createdAt: new Date().toISOString().split('T')[0],
 	},
 	{
 		id: 9,
 		userId: 3,
-		taskId: 1,
+		taskId: 3,
 		isCompleted: false,
 		shift: "Mañana",
-		createdAt: "2024-06-03"
+		createdAt: new Date().toISOString().split('T')[0]
 	}
 ]
 

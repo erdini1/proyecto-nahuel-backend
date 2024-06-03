@@ -15,7 +15,7 @@ const create = async (req, res, next) => {
 
 const markTaskAsCompleted = async (req, res, next) => {
 	try {
-		const userTask = await userTaskService.markTaskAsCompleted(req.params.userId, req.params.taskId);
+		const userTask = await userTaskService.markTaskAsCompleted(req.user.id, req.params.taskId);
 		res.status(HTTP_STATUSES.OK).json(userTask);
 	} catch (error) {
 		next(error)

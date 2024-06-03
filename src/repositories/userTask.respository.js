@@ -17,6 +17,7 @@ const getById = async (userTaskId) => {
 	return userTask
 }
 
+// TODO: Usar el id del usuario logueado desde el token
 // TODO: esta mal, ver que no se pueda completar una tarea del checklist anterior
 // Ver de comenzar el front, por ahi hay problemas que puedo solucionarlos ahi
 const getLatestByUserIdAndTaskId = async (userId, taskId) => {
@@ -52,6 +53,14 @@ const getByUserIdAndDate = async (userId, date) => {
 		where: {
 			userId,
 			createdAt: date
+		},
+		include: {
+			model: Task,
+			required: true,
+			attributes: ['id', 'description', "sector"]
+		},
+		attributes: {
+			exclude: ['updatedAt', 'taskId']
 		}
 	})
 	return userTasks

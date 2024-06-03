@@ -1,4 +1,4 @@
-import Task from '../models/task.model.js'
+import { Task } from '../models/index.model.js'
 
 const create = async (taskData) => {
 	const task = await Task.create(taskData)

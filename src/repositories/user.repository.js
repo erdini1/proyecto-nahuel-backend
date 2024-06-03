@@ -1,4 +1,4 @@
-import User from "../models/user.model.js"
+import { Task, User } from '../models/index.model.js'
 
 const create = async (userData) => {
 	const user = await User.create(userData)
@@ -14,6 +14,18 @@ const findUserByNumber = async (number) => {
 	return user
 }
 
+const getById = async (userId) => {
+	const user = await User.findByPk(userId, {
+		include: {
+			model: Task,
+			through: {
+				attributtes: ["isCompleted", "shift"]
+			}
+		}
+	})
+	return user
+}
+
 const save = async (user) => {
 	await user.save()
 }
@@ -21,5 +33,6 @@ const save = async (user) => {
 export const userRepository = {
 	create,
 	findUserByNumber,
+	getById,
 	save
 }

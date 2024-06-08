@@ -6,6 +6,7 @@ import { HTTP_STATUSES } from "../constants/http.constant.js";
 export const isAuthenticated = (req, res, next) => {
 	const bearerToken = req.headers.authorization;
 
+	console.log(bearerToken)
 	if (bearerToken === undefined || !bearerToken)
 		next(new ApiError("Acceso no autorizado, no se envio un token", HTTP_STATUSES.UNAUTHORIZED));
 

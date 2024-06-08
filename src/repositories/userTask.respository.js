@@ -1,4 +1,4 @@
-import { Task, UserTask } from '../models/index.model.js'
+import { Task, User, UserTask } from '../models/index.model.js'
 
 // TODO: Hacer un metodo que permita ver en que checklist se encuentra la tarea
 // TODO: Hacer un metodo que permita listar tareas completadas por usuario
@@ -54,13 +54,20 @@ const getByUserIdAndDate = async (userId, date) => {
 			userId,
 			createdAt: date
 		},
-		include: {
-			model: Task,
-			required: true,
-			attributes: ['id', 'description', "sector"]
-		},
+		include: [
+			{
+				model: Task,
+				required: true,
+				attributes: ['id', 'description', "sector"],
+			},
+			{
+				model: User,
+				required: true,
+				attributes: ['id', 'firstName', 'lastName']
+			}
+		],
 		attributes: {
-			exclude: ['updatedAt', 'taskId']
+			exclude: ['updatedAt', 'taskId', 'userId']
 		}
 	})
 	return userTasks

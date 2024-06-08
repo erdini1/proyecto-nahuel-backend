@@ -15,7 +15,8 @@ const create = async (req, res, next) => {
 
 const markTaskAsCompleted = async (req, res, next) => {
 	try {
-		const userTask = await userTaskService.markTaskAsCompleted(req.user.id, req.params.taskId);
+		const user = req.user
+		const userTask = await userTaskService.markTaskAsCompleted(user.id, req.params.taskId);
 		res.status(HTTP_STATUSES.OK).json(userTask);
 	} catch (error) {
 		next(error)
@@ -42,7 +43,7 @@ const getByUserId = async (req, res, next) => {
 
 const getByUserIdAndDate = async (req, res, next) => {
 	try {
-		const userTasks = await userTaskService.getByUserIdAndDate(req.params.userId, req.query.date);
+		const userTasks = await userTaskService.getByUserIdAndDate(req.user.id, req.query.date);
 		res.status(HTTP_STATUSES.OK).json(userTasks);
 	} catch (error) {
 		next(error)

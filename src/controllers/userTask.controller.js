@@ -43,7 +43,8 @@ const getByUserId = async (req, res, next) => {
 
 const getByUserIdAndDate = async (req, res, next) => {
 	try {
-		const userTasks = await userTaskService.getByUserIdAndDate(req.user.id, req.query.date);
+		const userId = req.query.userId || req.user.id;
+		const userTasks = await userTaskService.getByUserIdAndDate(+userId, req.query.date);
 		res.status(HTTP_STATUSES.OK).json(userTasks);
 	} catch (error) {
 		next(error)

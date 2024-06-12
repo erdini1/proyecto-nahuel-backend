@@ -13,8 +13,14 @@ const encode = (payload) => {
 
 const decode = (bearerToken) => {
 	const token = bearerToken.split(" ")[1]
-	const stringToken = token.split('"')[1]
-	return jwt.verify(stringToken, JWT.SECRET)
+	// Verificar si el token tiene comillas dobles y si las tiene, se eliminan.
+	const stringToken = token.startsWith('"') ? token.split('"')[1] : token
+	return jwt.verify(stringToken, JWT.SECRET/* , (error, decoded) => {
+		if (error) {
+			return null
+		}
+		return decoded
+	} */)
 }
 
 export {

@@ -9,5 +9,6 @@ router.get("/", isAdmin, taskController.getAll)
 router.post("/", isAdmin, taskController.create)
 router.get("/:id", isAdmin, taskController.getById)
 router.put("/:id", isAdmin, taskController.update)
+router.delete("/:id", isAdmin, taskController.deleteTask)
 
 export default router

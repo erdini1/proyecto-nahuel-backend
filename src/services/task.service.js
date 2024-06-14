@@ -54,9 +54,21 @@ const getById = async (taskId) => {
 	}
 }
 
+const deleteTask = async (taskId) => {
+	try {
+		const task = await taskRepository.getById(taskId);
+		if (!task) throw new ApiError("La tarea no existe", HTTP_STATUSES.NOT_FOUND);
+
+		await taskRepository.deleteTask(taskId);
+	} catch (error) {
+		throw error
+	}
+}
+
 export const taskService = {
 	create,
 	getAll,
 	update,
-	getById
+	getById,
+	deleteTask
 };

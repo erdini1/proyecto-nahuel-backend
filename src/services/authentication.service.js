@@ -23,6 +23,26 @@ const create = async (userData) => {
 	}
 };
 
+const update = async (userId, userData) => {
+	try {
+		const { firstName, lastName, number, password, role } = userData;
+
+		const user = await userRepository.getById(userId);
+		if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
+
+		user.firstName = firstName || user.firstName;
+		user.lastName = lastName || user.lastName;
+		user.number = number || user.number;
+		user.password = password ? await hashPassword(password) : user.password;
+		user.role = role || user.role;
+
+		await userRepository.save(user);
+		return user;
+	} catch (error) {
+		throw error
+	}
+};
+
 const login = async (userData) => {
 	try {
 		const { number, password } = userData;
@@ -58,8 +78,18 @@ const forgotPassword = async (userNumber, userData) => {
 	return user;
 }
 
+const deleteById = async (userId) => {
+	const user = await userRepository.getById(userId);
+	if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
+	user.isActive = false;
+	await userRepository.save(user);
+	return user;
+}
+
 export const authenticationService = {
 	create,
+	update,
 	login,
-	forgotPassword
+	forgotPassword,
+	deleteById
 };

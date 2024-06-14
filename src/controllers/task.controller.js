@@ -36,11 +36,19 @@ const getById = async (req, res, next) => {
 		next(error)
 	}
 }
-
+const deleteTask = async (req, res, next) => {
+	try {
+		await taskService.deleteTask(req.params.id);
+		res.status(HTTP_STATUSES.NO_CONTENT).json({ message: "Task deleted" });
+	} catch (error) {
+		next(error)
+	}
+}
 
 export const taskController = {
 	create,
 	getAll,
 	update,
-	getById
+	getById,
+	deleteTask
 }

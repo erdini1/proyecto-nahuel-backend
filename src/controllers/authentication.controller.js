@@ -10,6 +10,15 @@ const create = async (req, res, next) => {
 	}
 }
 
+const update = async (req, res, next) => {
+	try {
+		const user = await authenticationService.update(+req.query.userId, req.body);
+		res.status(HTTP_STATUSES.OK).json(user);
+	} catch (error) {
+		next(error)
+	}
+}
+
 const login = async (req, res, next) => {
 	try {
 		const token = await authenticationService.login(req.body);
@@ -28,8 +37,19 @@ const forgotPassword = async (req, res, next) => {
 	}
 }
 
+const deleteById = async (req, res, next) => {
+	try {
+		await authenticationService.deleteById(+req.query.userId);
+		res.status(HTTP_STATUSES.NO_CONTENT).json({ message: "User deleted" });
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const authenticationController = {
 	create,
+	update,
 	login,
-	forgotPassword
+	forgotPassword,
+	deleteById
 }

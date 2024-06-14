@@ -28,10 +28,19 @@ const save = async (task) => {
 	await task.save()
 }
 
+const deleteTask = async (taskId) => {
+	await Task.destroy({
+		where: {
+			id: taskId
+		}
+	})
+}
+
 export const taskRepository = {
 	create,
 	save,
 	getAll,
 	getById,
-	getByDescription
+	getByDescription,
+	deleteTask
 }

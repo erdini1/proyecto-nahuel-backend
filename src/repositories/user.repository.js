@@ -8,33 +8,20 @@ const create = async (userData) => {
 const findUserByNumber = async (number) => {
 	const user = await User.findOne({
 		where: {
-			number
+			number,
+			isActive: true
 		}
 	})
 	return user
 }
 
+// Mostrar los datos de un usuario por su id que esten activos
 const getById = async (userId) => {
-	const user = await User.findByPk(userId/* , {
-		// include: {
-		// 	model: Task,
-		// 	through: {
-		// 		attributtes: ["isCompleted", "shift"]
-		// 	}
-		// }
-		include: [
-			{
-				model: Task,
-				required: true,
-				attributes: ['id', 'description', "sector"],
-			},
-			{
-				model: User,
-				required: true,
-				attributes: ['id', 'firstName', 'lastName']
-			}
-		],
-	} */)
+	const user = await User.findByPk(userId, {
+		where: {
+			isActive: true
+		}
+	})
 	return user
 }
 
@@ -43,7 +30,11 @@ const save = async (user) => {
 }
 
 const getAll = async () => {
-	const users = await User.findAll()
+	const users = await User.findAll({
+		where: {
+			isActive: true
+		}
+	})
 	return users
 }
 

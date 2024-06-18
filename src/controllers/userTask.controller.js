@@ -1,9 +1,6 @@
 import { HTTP_STATUSES } from '../constants/http.constant.js';
 import { userTaskService } from '../services/userTask.service.js';
 
-
-// TODO: Implementar que no se pueda crear otro userTask si ya existe uno en el mismo dia
-// TODO: Agregar un endpoint para agregar nuevas tareas a un userTask ya existente
 const create = async (req, res, next) => {
 	try {
 		const userTask = await userTaskService.create(req.body);

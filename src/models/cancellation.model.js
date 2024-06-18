@@ -11,7 +11,7 @@ const Cancellation = sequelize.define("Cancellation", {
 		allowNull: false,
 	},
 	amount: {
-		type: DataTypes.DECIMAL,
+		type: DataTypes.FLOAT,
 		allowNull: false,
 	},
 })

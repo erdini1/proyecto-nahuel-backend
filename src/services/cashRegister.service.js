@@ -5,7 +5,7 @@ import { userRepository } from "../repositories/user.repository.js";
 
 const create = async (userId, cashRegisterData) => {
 	try {
-		const { cashRegisterNumber, initialAmount, changeAmount/* , userId */ } = cashRegisterData
+		const { cashRegisterNumber, initialAmount, changeAmount } = cashRegisterData
 		const user = await userRepository.getById(userId)
 		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND)
 
@@ -60,9 +60,23 @@ const update = async (cashRegisterId, cashRegisterData) => {
 	}
 }
 
-const getByUserIdAndDate = async (userId, date) => {
+const checkIfCashRegisterExists = async (userId) => {
 	try {
-		return await cashRegisterRepository.getByUserIdAndDate(userId, date);
+		const date = new Date();
+		const cashRegister = await cashRegisterRepository.getByUserIdAndDate(userId, date);
+		if (!cashRegister) return false;
+		return true;
+	} catch (error) {
+		throw error
+	}
+}
+
+const getByUserId = async (userId) => {
+	try {
+		const cashRegister = await cashRegisterRepository.getByUserId(userId);
+		if (!cashRegister) throw new ApiError("El registro de caja no existe", HTTP_STATUSES.NOT_FOUND);
+
+		return cashRegister;
 	} catch (error) {
 		throw error
 	}
@@ -73,5 +87,6 @@ export const cashRegisterService = {
 	getAll,
 	getById,
 	update,
-	getByUserIdAndDate
+	checkIfCashRegisterExists,
+	getByUserId
 };

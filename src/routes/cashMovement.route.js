@@ -9,5 +9,6 @@ router.get("/", isCashier, cashMovementController.getAll)
 router.get("/user", isCashier, cashMovementController.getByUserId)
 router.get("/:cashMovementId", isAdmin, cashMovementController.getById)
 router.put("/:cashMovementId", isCashier, cashMovementController.update)
+router.delete("/:cashMovementId", isCashier, cashMovementController.deleteById)
 
 export default router

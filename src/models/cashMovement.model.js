@@ -7,7 +7,7 @@ const CashMovement = sequelize.define("CashMovement", {
 		allowNull: false,
 	},
 	amount: {
-		type: DataTypes.FLOAT,
+		type: DataTypes.DECIMAL(10, 2),
 		allowNull: false,
 	},
 	time: {

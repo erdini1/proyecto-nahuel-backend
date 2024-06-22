@@ -53,6 +53,38 @@ const getById = async (cancellationId) => {
 	return cancellation
 }
 
+const getByCashRegisterId = async (cashRegisterId) => {
+	const cancellations = await Cancellation.findAll({
+		where: {
+			cashRegisterId
+		},
+		include: [
+			{
+				model: CashRegister,
+				required: true,
+				attributes: [
+					"id",
+					"cashRegisterNumber",
+					"initialAmount",
+					"changeAmount",
+					"totalCashInSystem",
+					"totalCashOnHand",
+					"difference",
+				]
+			}
+		],
+		attributes: {
+			exclude: ['updatedAt', "createdAt", 'cashRegisterId']
+		}
+	})
+	return cancellations
+}
+
+const deleteById = async (cancellationId) => {
+	const cancellation = await Cancellation.findByPk(cancellationId)
+	await cancellation.destroy()
+}
+
 const save = async (cancellation) => {
 	await cancellation.save()
 }
@@ -62,4 +94,6 @@ export const cancellationRepository = {
 	save,
 	getAll,
 	getById,
+	getByCashRegisterId,
+	deleteById
 }

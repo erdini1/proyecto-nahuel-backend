@@ -1,5 +1,6 @@
 import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
+import formatDate from "../helpers/formatDate.helper.js";
 import { cancellationRepository } from "../repositories/cancellation.repository.js";
 import { cashRegisterRepository } from "../repositories/cashRegister.repository.js"
 
@@ -13,6 +14,7 @@ const create = async (cancellationData) => {
 			type,
 			method,
 			amount,
+			time: formatDate(new Date()),
 			cashRegisterId
 		})
 	} catch (error) {
@@ -57,10 +59,33 @@ const update = async (cancellationId, cancellationData) => {
 	}
 }
 
+const getByUserId = async (userId) => {
+	try {
+		const cashRegister = await cashRegisterRepository.getByUserId(userId);
+		if (!cashRegister) return []
+
+		const cancellation = await cancellationRepository.getByCashRegisterId(cashRegister.id);
+		return cancellation;
+	} catch (error) {
+		throw error
+	}
+}
+
+const deleteById = async (cancellationId) => {
+	try {
+		const cancellation = await cancellationRepository.getById(cancellationId);
+		if (!cancellation) throw new ApiError("La anulación no existe", HTTP_STATUSES.NOT_FOUND);
+		await cancellationRepository.deleteById(cancellationId);
+	} catch (error) {
+		throw error
+	}
+}
 
 export const cancellationService = {
 	create,
 	getAll,
 	getById,
 	update,
+	getByUserId,
+	deleteById
 };

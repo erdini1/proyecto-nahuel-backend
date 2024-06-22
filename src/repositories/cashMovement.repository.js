@@ -63,11 +63,6 @@ const getById = async (cashMovementId) => {
 	return cashMovement
 }
 
-const save = async (cashMovement) => {
-	await cashMovement.save()
-}
-
-
 const getByCashRegisterId = async (cashRegisterId) => {
 	const cashMovements = await CashMovement.findAll({
 		where: { cashRegisterId },
@@ -98,10 +93,20 @@ const getByCashRegisterId = async (cashRegisterId) => {
 	return cashMovements
 }
 
+const deleteById = async (cashMovementId) => {
+	const cashMovement = await CashMovement.findByPk(cashMovementId)
+	await cashMovement.destroy()
+}
+
+const save = async (cashMovement) => {
+	await cashMovement.save()
+}
+
 export const cashMovementRepository = {
 	create,
 	save,
 	getAll,
 	getById,
-	getByCashRegisterId
+	getByCashRegisterId,
+	deleteById
 }

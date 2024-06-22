@@ -2,6 +2,7 @@ import { CashRegister, User } from '../models/index.model.js'
 
 const create = async (cashRegisterData) => {
 	const cashRegister = await CashRegister.create(cashRegisterData)
+	console.log(cashRegister)
 	return cashRegister?.dataValues
 }
 
@@ -41,7 +42,7 @@ const getByUserIdAndDate = async (userId, date) => {
 	const cashRegister = await CashRegister.findOne({
 		where: {
 			userId,
-			date: date
+			date
 		}
 	})
 	return cashRegister

@@ -12,23 +12,23 @@ const CashRegister = sequelize.define("CashRegister", {
 		defaultValue: DataTypes.NOW
 	},
 	initialAmount: {
-		type: DataTypes.FLOAT, // TODO: Ver si es mejor usar FLOAT
+		type: DataTypes.DECIMAL(10, 2),
 		allowNull: false,
 	},
 	changeAmount: {
-		type: DataTypes.FLOAT,
+		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
 	totalCashInSystem: {
-		type: DataTypes.FLOAT,
+		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
 	totalCashOnHand: {
-		type: DataTypes.FLOAT,
+		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
 	difference: {
-		type: DataTypes.FLOAT,
+		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	}
 })

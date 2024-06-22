@@ -6,7 +6,9 @@ const router = express.Router()
 
 router.post("/", isCashier, cancellationController.create)
 router.get("/", isAdmin, cancellationController.getAll)
+router.get("/user", isCashier, cancellationController.getByUserId)
 router.get("/:cancellationId", isAdmin, cancellationController.getById)
 router.put("/:cancellationId", isCashier, cancellationController.update)
+router.delete("/:cancellationId", isCashier, cancellationController.deleteById)
 
 export default router

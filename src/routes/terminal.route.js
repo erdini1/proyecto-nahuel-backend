@@ -5,7 +5,7 @@ import { terminalController } from "../controllers/terminal.controller.js"
 const router = express.Router()
 
 router.post("/", isCashier, terminalController.create)
-router.get("/", isAdmin, terminalController.getAll)
+router.get("/", isCashier, terminalController.getAll)
 router.get("/:terminalId", isAdmin, terminalController.getById)
 router.put("/:terminalId", isCashier, terminalController.update) // Revisar roles
 

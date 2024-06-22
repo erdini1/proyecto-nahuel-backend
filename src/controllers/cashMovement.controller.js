@@ -40,8 +40,16 @@ const update = async (req, res, next) => {
 const getByUserId = async (req, res, next) => {
 	try {
 		const cashMovements = await cashMovementService.getByUserId(req.user.id);
-		// const cashMovements = await cashMovementService.getByUserId(req.params.userId);
 		res.status(HTTP_STATUSES.OK).json(cashMovements);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const deleteById = async (req, res, next) => {
+	try {
+		await cashMovementService.deleteById(req.params.cashMovementId);
+		res.status(HTTP_STATUSES.NO_CONTENT).send();
 	} catch (error) {
 		next(error)
 	}
@@ -52,5 +60,6 @@ export const cashMovementController = {
 	getAll,
 	getById,
 	update,
-	getByUserId
+	getByUserId,
+	deleteById
 }

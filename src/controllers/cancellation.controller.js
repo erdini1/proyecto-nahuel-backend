@@ -37,9 +37,29 @@ const update = async (req, res, next) => {
 	}
 }
 
+const getByUserId = async (req, res, next) => {
+	try {
+		const cancellation = await cancellationService.getByUserId(req.user.id);
+		res.status(HTTP_STATUSES.OK).json(cancellation);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const deleteById = async (req, res, next) => {
+	try {
+		await cancellationService.deleteById(req.params.cancellationId);
+		res.status(HTTP_STATUSES.NO_CONTENT).send();
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const cancellationController = {
 	create,
 	getAll,
 	getById,
 	update,
+	getByUserId,
+	deleteById
 }

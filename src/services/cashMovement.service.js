@@ -75,10 +75,21 @@ const getByUserId = async (userId) => {
 	}
 }
 
+const deleteById = async (cashMovementId) => {
+	try {
+		const cashMovement = await cashMovementRepository.getById(cashMovementId);
+		if (!cashMovement) throw new ApiError("El movimiento no existe", HTTP_STATUSES.NOT_FOUND);
+		await cashMovementRepository.deleteById(cashMovementId);
+	} catch (error) {
+		throw error
+	}
+}
+
 export const cashMovementService = {
 	create,
 	getAll,
 	getById,
 	update,
-	getByUserId
+	getByUserId,
+	deleteById
 };

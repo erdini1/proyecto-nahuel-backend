@@ -48,11 +48,38 @@ const getByUserIdAndDate = async (req, res, next) => {
 	}
 }
 
+const getByDate = async (req, res, next) => {
+	try {
+		const userTasks = await userTaskService.getByDate(req.query.date);
+		res.status(HTTP_STATUSES.OK).json(userTasks);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const getByRangeOfDates = async (req, res, next) => {
+	try {
+		const userTasks = await userTaskService.getByRangeOfDates(req.query.userId, req.query.startDate, req.query.endDate);
+		res.status(HTTP_STATUSES.OK).json(userTasks);
+	} catch (error) {
+		next(error)
+	}
+}
+
 // TODO: me falto ver este
 const getByTaskId = async (req, res, next) => {
 	try {
 		const userTasks = await userTaskService.getByTaskId(req.params.taskId);
 		res.status(HTTP_STATUSES.OK).json(userTasks);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const deleteUserTask = async (req, res, next) => {
+	try {
+		await userTaskService.deleteUserTask(req.params.userTaskId);
+		res.status(HTTP_STATUSES.NO_CONTENT).send();
 	} catch (error) {
 		next(error)
 	}
@@ -65,4 +92,7 @@ export const userTaskController = {
 	getByUserId,
 	getByUserIdAndDate,
 	getByTaskId,
+	getByDate,
+	deleteUserTask,
+	getByRangeOfDates
 }

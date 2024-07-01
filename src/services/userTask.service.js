@@ -29,7 +29,7 @@ const markTaskAsCompleted = async (userId, taskId) => {
 		const userTask = await userTaskRepository.getLatestByUserIdAndTaskId(userId, taskId)
 		if (!userTask) throw new ApiError("La tarea no existe o no esta asignada a este usuario", HTTP_STATUSES.NOT_FOUND)
 
-		userTask.isCompleted = true
+		userTask.isCompleted = !userTask.isCompleted
 		await userTaskRepository.save(userTask)
 		return userTask
 	} catch (error) {
@@ -74,10 +74,46 @@ const getByUserIdAndDate = async (userId, date) => {
 	}
 }
 
+const getByDate = async (date) => {
+	try {
+		const userTasks = await userTaskRepository.getByDate(date)
+		return userTasks
+	} catch (error) {
+		throw error
+	}
+}
+
+const getMyLastTasks = async (userId) => {
+	try {
+		const date = new Date().toISOString().split('T')[0]
+		const userTasks = await userTaskRepository.getByUserIdAndDate(userId, date)
+		return userTasks
+	} catch (error) {
+		throw error
+	}
+}
+
+const getByRangeOfDates = async (userId, startDate, endDate) => {
+	try {
+		const userTasks = await userTaskRepository.getByRangeOfDates(userId, startDate, endDate)
+		return userTasks
+	} catch (error) {
+		throw error
+	}
+}
+
 const getByTaskId = async (taskId) => {
 	try {
 		const userTasks = await userTaskRepository.getByTaskId(taskId)
 		return userTasks
+	} catch (error) {
+		throw error
+	}
+}
+
+const deleteUserTask = async (userTaskId) => {
+	try {
+		await userTaskRepository.deleteUserTask(userTaskId)
 	} catch (error) {
 		throw error
 	}
@@ -91,6 +127,10 @@ export const userTaskService = {
 	getByUserId,
 	getByUserIdAndDate,
 	getByTaskId,
+	getMyLastTasks,
+	getByDate,
+	deleteUserTask,
+	getByRangeOfDates
 }
 
 

@@ -10,6 +10,15 @@ const create = async (req, res, next) => {
 	}
 }
 
+const bulkCreate = async (req, res, next) => {
+	try {
+		const terminals = await terminalService.bulkCreate(req.body);
+		res.status(HTTP_STATUSES.CREATED).json(terminals);
+	} catch (error) {
+		next(error)
+	}
+}
+
 const getAll = async (req, res, next) => {
 	try {
 		const terminals = await terminalService.getAll();
@@ -37,9 +46,30 @@ const update = async (req, res, next) => {
 	}
 }
 
+const getByCashRegisterId = async (req, res, next) => {
+	try {
+		const terminal = await terminalService.getByCashRegisterId(req.params.cashRegisterId);
+		res.status(HTTP_STATUSES.OK).json(terminal);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const deleteTerminal = async (req, res, next) => {
+	try {
+		await terminalService.deleteTerminal(req.params.terminalId);
+		res.status(HTTP_STATUSES.NO_CONTENT).send();
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const terminalController = {
 	create,
+	bulkCreate,
 	getAll,
 	getById,
 	update,
+	getByCashRegisterId,
+	deleteTerminal,
 }

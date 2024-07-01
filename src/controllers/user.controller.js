@@ -11,6 +11,26 @@ const getAll = async (req, res, next) => {
 	}
 }
 
+const getMyUser = async (req, res, next) => {
+	try {
+		const user = await userService.getByUser(req.user.id);
+		res.status(HTTP_STATUSES.OK).json(user);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const getById = async (req, res, next) => {
+	try {
+		const user = await userService.getByUser(+req.params.userId);
+		res.status(HTTP_STATUSES.OK).json(user);
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const userController = {
-	getAll
+	getAll,
+	getMyUser,
+	getById
 }

@@ -19,18 +19,54 @@ const CashRegister = sequelize.define("CashRegister", {
 		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
-	totalCashInSystem: {
+	// totalCashInSystem: { // Se puede calcular con la suma de todas las ventas
+	// 	type: DataTypes.DECIMAL(10, 2),
+	// 	allowNull: true,
+	// },
+	// totalCashOnHand: {
+	// 	type: DataTypes.DECIMAL(10, 2),
+	// 	allowNull: true,
+	// },
+	salesWithCash: {
 		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
-	totalCashOnHand: {
+	salesWithCards: {
 		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
-	difference: {
+	salesWithCredit: {
 		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
-	}
+	},
+	salesWithMercadoPago: {
+		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
+	salesWithPointMaxiconsumo: {
+		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
+	cashToRenderWithCash: {
+		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
+	cashToRenderWithCards: {
+		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
+	cashToRenderWithCredit: {
+		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
+	cashToRenderWithMercadoPago: {
+		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
+	cashToRenderWithPointMaxiconsumo: {
+		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
 })
 
 export default CashRegister

@@ -5,7 +5,21 @@ import { userRepository } from "../repositories/user.repository.js";
 
 const create = async (userId, cashRegisterData) => {
 	try {
-		const { cashRegisterNumber, initialAmount, changeAmount } = cashRegisterData
+		const {
+			cashRegisterNumber,
+			initialAmount,
+			changeAmount,
+			/* salesWithCash,
+			salesWithCards,
+			salesWithCredit,
+			salesWithMercadoPago,
+			salesWithPointMaxiconsumo,
+			cashToRenderWithCash,
+			cashToRenderWithCards,
+			cashToRenderWithCredit,
+			cashToRenderWithMercadoPago,
+			cashToRenderWithPointMaxiconsumo, */
+		} = cashRegisterData
 		const user = await userRepository.getById(userId)
 		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND)
 
@@ -13,6 +27,11 @@ const create = async (userId, cashRegisterData) => {
 			cashRegisterNumber,
 			initialAmount,
 			changeAmount,
+			/* salesWithCash,
+			salesWithCards,
+			salesWithCredit,
+			salesWithMercadoPago,
+			salesWithPointMaxiconsumo, */
 			userId
 		})
 	} catch (error) {
@@ -41,7 +60,23 @@ const getById = async (cashRegisterId) => {
 
 const update = async (cashRegisterId, cashRegisterData) => {
 	try {
-		const { cashRegisterNumber, initialAmount, changeAmount, totalCashInSystem, totalCashOnHand, difference } = cashRegisterData;
+		const {
+			cashRegisterNumber,
+			initialAmount,
+			changeAmount,
+			// totalCashInSystem,
+			// totalCashOnHand,
+			salesWithCash,
+			salesWithCards,
+			salesWithCredit,
+			salesWithMercadoPago,
+			salesWithPointMaxiconsumo,
+			cashToRenderWithCash,
+			cashToRenderWithCards,
+			cashToRenderWithCredit,
+			cashToRenderWithMercadoPago,
+			cashToRenderWithPointMaxiconsumo,
+		} = cashRegisterData;
 
 		const cashRegister = await cashRegisterRepository.getById(cashRegisterId);
 		if (!cashRegister) throw new ApiError("El registro de caja no existe", HTTP_STATUSES.NOT_FOUND);
@@ -49,9 +84,18 @@ const update = async (cashRegisterId, cashRegisterData) => {
 		cashRegister.cashRegisterNumber = cashRegisterNumber || cashRegister.cashRegisterNumber;
 		cashRegister.initialAmount = initialAmount || cashRegister.initialAmount;
 		cashRegister.changeAmount = changeAmount || cashRegister.changeAmount;
-		cashRegister.totalCashInSystem = totalCashInSystem || cashRegister.totalCashInSystem;
-		cashRegister.totalCashOnHand = totalCashOnHand || cashRegister.totalCashOnHand;
-		cashRegister.difference = difference || cashRegister.difference;
+		// cashRegister.totalCashInSystem = totalCashInSystem || cashRegister.totalCashInSystem;
+		// cashRegister.totalCashOnHand = totalCashOnHand || cashRegister.totalCashOnHand;
+		cashRegister.salesWithCash = salesWithCash || cashRegister.salesWithCash;
+		cashRegister.salesWithCards = salesWithCards || cashRegister.salesWithCards;
+		cashRegister.salesWithCredit = salesWithCredit || cashRegister.salesWithCredit;
+		cashRegister.salesWithMercadoPago = salesWithMercadoPago || cashRegister.salesWithMercadoPago;
+		cashRegister.salesWithPointMaxiconsumo = salesWithPointMaxiconsumo || cashRegister.salesWithPointMaxiconsumo;
+		cashRegister.cashToRenderWithCash = cashToRenderWithCash || cashRegister.cashToRenderWithCash;
+		cashRegister.cashToRenderWithCards = cashToRenderWithCards || cashRegister.cashToRenderWithCards;
+		cashRegister.cashToRenderWithCredit = cashToRenderWithCredit || cashRegister.cashToRenderWithCredit;
+		cashRegister.cashToRenderWithMercadoPago = cashToRenderWithMercadoPago || cashRegister.cashToRenderWithMercadoPago;
+		cashRegister.cashToRenderWithPointMaxiconsumo = cashToRenderWithPointMaxiconsumo || cashRegister.cashToRenderWithPointMaxiconsumo;
 
 		await cashRegisterRepository.save(cashRegister);
 		return cashRegister;

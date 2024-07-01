@@ -11,15 +11,9 @@ const getAll = async () => {
 			{
 				model: CashRegister,
 				required: true,
-				attributes: [
-					"id",
-					"cashRegisterNumber",
-					"initialAmount",
-					"changeAmount",
-					"totalCashInSystem",
-					"totalCashOnHand",
-					"difference",
-				],
+				attributes: {
+					exclude: ['updatedAt', "createdAt"]
+				},
 			},
 			{
 				model: Provider,
@@ -40,15 +34,9 @@ const getById = async (cashMovementId) => {
 			{
 				model: CashRegister,
 				required: true,
-				attributes: [
-					"id",
-					"cashRegisterNumber",
-					"initialAmount",
-					"changeAmount",
-					"totalCashInSystem",
-					"totalCashOnHand",
-					"difference",
-				],
+				attributes: {
+					exclude: ['updatedAt', "createdAt"]
+				}
 			},
 			{
 				model: Provider,
@@ -70,15 +58,9 @@ const getByCashRegisterId = async (cashRegisterId) => {
 			{
 				model: CashRegister,
 				required: true,
-				attributes: [
-					"id",
-					"cashRegisterNumber",
-					"initialAmount",
-					"changeAmount",
-					"totalCashInSystem",
-					"totalCashOnHand",
-					"difference",
-				],
+				attributes: {
+					exclude: ['updatedAt', "createdAt"]
+				}
 			},
 			{
 				model: Provider,

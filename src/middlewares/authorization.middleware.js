@@ -12,7 +12,7 @@ export const isAuthenticated = (req, res, next) => {
 	try {
 		const { id, firstName, lastName, userNumber, role } = decode(bearerToken);
 
-		if (role != ROLE.ADMIN && role != ROLE.EMPLOYEE && ROLE.CASHIER) next(new ApiError("El token no es valido", HTTP_STATUSES.UNAUTHORIZED))
+		if (role != ROLE.ADMIN && role != ROLE.EMPLOYEE && role != ROLE.CASHIER) next(new ApiError("El token no es valido", HTTP_STATUSES.UNAUTHORIZED))
 
 		const user = {
 			id,

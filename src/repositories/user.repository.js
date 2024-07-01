@@ -32,7 +32,7 @@ const save = async (user) => {
 const getAll = async () => {
 	const users = await User.findAll({
 		where: {
-			isActive: true
+			isActive: true,
 		}
 	})
 	return users

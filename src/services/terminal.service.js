@@ -19,6 +19,20 @@ const create = async (terminalData) => {
 	}
 }
 
+const bulkCreate = async (terminalsData) => {
+	try {
+		for (const terminalData of terminalsData) {
+			const { cashRegisterId } = terminalData;
+			const cashRegister = await cashRegisterRepository.getById(cashRegisterId);
+			if (!cashRegister) throw new ApiError("El registro de caja no existe", HTTP_STATUSES.NOT_FOUND);
+		}
+
+		return await terminalRepository.bulkCreate(terminalsData);
+	} catch (error) {
+		throw error;
+	}
+};
+
 const getAll = async () => {
 	try {
 		return await terminalRepository.getAll();
@@ -55,10 +69,32 @@ const update = async (terminalId, terminalData) => {
 	}
 }
 
+const getByCashRegisterId = async (cashRegisterId) => {
+	try {
+		return await terminalRepository.getByCashRegisterId(cashRegisterId);
+	} catch (error) {
+		throw error
+	}
+}
+
+const deleteTerminal = async (terminalId) => {
+	try {
+		const terminal = await terminalRepository.getById(terminalId);
+		if (!terminal) throw new ApiError("La terminal no existe", HTTP_STATUSES.NOT_FOUND);
+
+		await terminalRepository.deleteTerminal(terminalId);
+	} catch (error) {
+		throw error
+	}
+}
+
 
 export const terminalService = {
 	create,
+	bulkCreate,
 	getAll,
 	getById,
 	update,
+	getByCashRegisterId,
+	deleteTerminal
 };

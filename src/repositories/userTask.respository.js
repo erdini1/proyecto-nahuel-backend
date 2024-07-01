@@ -1,3 +1,4 @@
+import { Op } from 'sequelize'
 import { Task, User, UserTask } from '../models/index.model.js'
 
 // TODO: Hacer un metodo que permita ver en que checklist se encuentra la tarea
@@ -71,6 +72,59 @@ const getByUserIdAndDate = async (userId, date) => {
 	return userTasks
 }
 
+const getByDate = async (date) => {
+	const userTasks = await UserTask.findAll({
+		where: {
+			createdAt: date
+		},
+		include: [
+			{
+				model: Task,
+				required: true,
+				attributes: ['id', 'description', "sector"],
+			},
+			{
+				model: User,
+				required: true,
+				attributes: ['id', 'firstName', 'lastName']
+			}
+		],
+		attributes: {
+			exclude: ['updatedAt', 'taskId', 'userId']
+		}
+	})
+	return userTasks
+}
+
+// Obtener usertasks entre dos fechas
+const getByRangeOfDates = async (userId, startDate, endDate) => {
+	const userTasks = await UserTask.findAll({
+		where: {
+			createdAt: {
+				[Op.between]: [startDate, endDate]
+			},
+			userId
+		},
+		include: [
+			{
+				model: Task,
+				required: true,
+				attributes: ['id', 'description', "sector"],
+			},
+			{
+				model: User,
+				required: true,
+				attributes: ['id', 'firstName', 'lastName']
+			}
+		],
+		attributes: {
+			exclude: ['updatedAt', 'taskId', 'userId']
+		},
+		order: [['createdAt', 'ASC']]
+	})
+	return userTasks
+}
+
 // Permite ver todas las tareas asignadas a un usuario
 const getByTaskId = async (taskId) => {
 	const userTasks = await UserTask.findAll({
@@ -79,6 +133,11 @@ const getByTaskId = async (taskId) => {
 		}
 	})
 	return userTasks
+}
+
+const deleteUserTask = async (userTaskId) => {
+	const userTask = await UserTask.findByPk(userTaskId)
+	await userTask.destroy()
 }
 
 // Permite guardar un userTask
@@ -95,4 +154,7 @@ export const userTaskRepository = {
 	getByUserIdAndDate,
 	getByTaskId,
 	save,
+	getByDate,
+	deleteUserTask,
+	getByRangeOfDates
 }

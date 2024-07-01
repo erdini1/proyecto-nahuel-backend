@@ -11,15 +11,9 @@ const getAll = async () => {
 			{
 				model: CashRegister,
 				required: true,
-				attributes: [
-					"id",
-					"cashRegisterNumber",
-					"initialAmount",
-					"changeAmount",
-					"totalCashInSystem",
-					"totalCashOnHand",
-					"difference",
-				] // TODO: revisar los campos que quiero mostrar
+				attributes: {
+					exclude: ['updatedAt', "createdAt"]
+				}
 			}
 		],
 		attributes: {
@@ -35,15 +29,9 @@ const getById = async (cancellationId) => {
 			{
 				model: CashRegister,
 				required: true,
-				attributes: [
-					"id",
-					"cashRegisterNumber",
-					"initialAmount",
-					"changeAmount",
-					"totalCashInSystem",
-					"totalCashOnHand",
-					"difference",
-				] // TODO: revisar los campos que quiero mostrar
+				attributes: {
+					exclude: ['updatedAt', "createdAt"]
+				}
 			}
 		],
 		attributes: {
@@ -62,15 +50,9 @@ const getByCashRegisterId = async (cashRegisterId) => {
 			{
 				model: CashRegister,
 				required: true,
-				attributes: [
-					"id",
-					"cashRegisterNumber",
-					"initialAmount",
-					"changeAmount",
-					"totalCashInSystem",
-					"totalCashOnHand",
-					"difference",
-				]
+				attributes: {
+					exclude: ['updatedAt', "createdAt"]
+				}
 			}
 		],
 		attributes: {

@@ -1,6 +1,7 @@
 import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { cashRegisterRepository } from "../repositories/cashRegister.repository.js"
+import { terminalRepository } from "../repositories/terminal.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 
 const create = async (userId, cashRegisterData) => {
@@ -23,7 +24,7 @@ const create = async (userId, cashRegisterData) => {
 		const user = await userRepository.getById(userId)
 		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND)
 
-		return await cashRegisterRepository.create({
+		const newCashRegister = await cashRegisterRepository.create({
 			cashRegisterNumber,
 			initialAmount,
 			changeAmount,
@@ -34,6 +35,14 @@ const create = async (userId, cashRegisterData) => {
 			salesWithPointMaxiconsumo, */
 			userId
 		})
+
+		await terminalRepository.create({
+			terminalNumber: "cash",
+			description: "EFECTIVO",
+			cashRegisterId: newCashRegister.id
+		})
+
+		return newCashRegister;
 	} catch (error) {
 		throw error
 	}
@@ -64,8 +73,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 			cashRegisterNumber,
 			initialAmount,
 			changeAmount,
-			// totalCashInSystem,
-			// totalCashOnHand,
+			observations,
 			salesWithCash,
 			salesWithCards,
 			salesWithCredit,
@@ -76,6 +84,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 			cashToRenderWithCredit,
 			cashToRenderWithMercadoPago,
 			cashToRenderWithPointMaxiconsumo,
+			isClosed
 		} = cashRegisterData;
 
 		const cashRegister = await cashRegisterRepository.getById(cashRegisterId);
@@ -84,8 +93,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 		cashRegister.cashRegisterNumber = cashRegisterNumber || cashRegister.cashRegisterNumber;
 		cashRegister.initialAmount = initialAmount || cashRegister.initialAmount;
 		cashRegister.changeAmount = changeAmount || cashRegister.changeAmount;
-		// cashRegister.totalCashInSystem = totalCashInSystem || cashRegister.totalCashInSystem;
-		// cashRegister.totalCashOnHand = totalCashOnHand || cashRegister.totalCashOnHand;
+		cashRegister.observations = observations || cashRegister.observations;
 		cashRegister.salesWithCash = salesWithCash || cashRegister.salesWithCash;
 		cashRegister.salesWithCards = salesWithCards || cashRegister.salesWithCards;
 		cashRegister.salesWithCredit = salesWithCredit || cashRegister.salesWithCredit;
@@ -96,6 +104,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 		cashRegister.cashToRenderWithCredit = cashToRenderWithCredit || cashRegister.cashToRenderWithCredit;
 		cashRegister.cashToRenderWithMercadoPago = cashToRenderWithMercadoPago || cashRegister.cashToRenderWithMercadoPago;
 		cashRegister.cashToRenderWithPointMaxiconsumo = cashToRenderWithPointMaxiconsumo || cashRegister.cashToRenderWithPointMaxiconsumo;
+		cashRegister.isClosed = isClosed || cashRegister.isClosed
 
 		await cashRegisterRepository.save(cashRegister);
 		return cashRegister;

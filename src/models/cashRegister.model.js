@@ -19,14 +19,10 @@ const CashRegister = sequelize.define("CashRegister", {
 		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
-	// totalCashInSystem: { // Se puede calcular con la suma de todas las ventas
-	// 	type: DataTypes.DECIMAL(10, 2),
-	// 	allowNull: true,
-	// },
-	// totalCashOnHand: {
-	// 	type: DataTypes.DECIMAL(10, 2),
-	// 	allowNull: true,
-	// },
+	observations: {
+		type: DataTypes.STRING,
+		allowNull: true,
+	},
 	salesWithCash: {
 		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
@@ -67,6 +63,11 @@ const CashRegister = sequelize.define("CashRegister", {
 		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
+	isClosed: {
+		type: DataTypes.BOOLEAN,
+		allowNull: false,
+		defaultValue: false
+	}
 })
 
 export default CashRegister

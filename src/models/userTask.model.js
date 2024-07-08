@@ -12,9 +12,14 @@ const UserTask = sequelize.define("UserTask", {
 		type: DataTypes.BOOLEAN,
 		allowNull: false,
 	},
-	shift: {
-		type: DataTypes.STRING,
+	// shift: {
+	// 	type: DataTypes.STRING,
+	// 	allowNull: true,
+	// },
+	isActive: {
+		type: DataTypes.BOOLEAN,
 		allowNull: false,
+		defaultValue: true,
 	},
 	createdAt: {
 		type: DataTypes.DATEONLY,

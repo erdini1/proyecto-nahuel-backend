@@ -1,42 +1,38 @@
-import { Op } from 'sequelize'
-import { Task, User, UserTask } from '../models/index.model.js'
+import { Op, where } from 'sequelize'
+import { Task, User, UserTask, TaskSet } from '../models/index.model.js'
 
-// TODO: Hacer un metodo que permita ver en que checklist se encuentra la tarea
-// TODO: Hacer un metodo que permita listar tareas completadas por usuario
-// TODO: Hacer un metodo que permita listar tareas completadas por sector
-// TODO: Hacer un metodo que permita ver las tareas que no estan en ningun checklist
-
-// Permite asignar masivamente tareas a un usuario
+// REVISADO
 const createMany = async (userTasksData) => {
 	const userTasks = await UserTask.bulkCreate(userTasksData)
 	return userTasks
 }
 
-// Permite obtener un userTask por su id
-const getById = async (userTaskId) => {
-	const userTask = await UserTask.findByPk(userTaskId)
-	return userTask
-}
-
-// TODO: esta mal, ver que no se pueda completar una tarea del checklist anterior
-const getLatestByUserIdAndTaskId = async (userId, taskId) => {
+// REVISADO
+const getLatestByUserIdAndTaskId = async (userId, taskId, taskSetId) => {
 	const user = await UserTask.findOne({
 		where: {
 			userId,
-			taskId
+			taskId,
+			taskSetId
 		},
 		order: [['createdAt', 'DESC']]
 	})
 	return user
 }
 
-// Permite obtener todos los userTasks
+// NO REVISADO
+const getById = async (userTaskId) => {
+	const userTask = await UserTask.findByPk(userTaskId)
+	return userTask
+}
+
+// NO REVISADO
 const getAll = async () => {
 	const userTasks = await UserTask.findAll()
 	return userTasks
 }
 
-// Permite obtener todas las tareas asignadas a un usuario
+// NO REVISADO
 const getByUserId = async (userId) => {
 	const userTasks = await UserTask.findAll({
 		where: {
@@ -46,12 +42,12 @@ const getByUserId = async (userId) => {
 	return userTasks
 }
 
-// Permite obtener todas las tareas asignadas a un usuario en una fecha especifica
-const getByUserIdAndDate = async (userId, date) => {
+// REVISADO
+const getByUserIdAndTaskSet = async (userId, taskSetId) => {
 	const userTasks = await UserTask.findAll({
 		where: {
 			userId,
-			createdAt: date
+			taskSetId,
 		},
 		include: [
 			{
@@ -63,15 +59,50 @@ const getByUserIdAndDate = async (userId, date) => {
 				model: User,
 				required: true,
 				attributes: ['id', 'firstName', 'lastName']
+			},
+			{
+				model: TaskSet,
+				required: true,
+				attributes: ['id', 'shift', 'observations', 'isClosed'],
+				where: {
+					isClosed: false,
+				}
 			}
 		],
 		attributes: {
 			exclude: ['updatedAt', 'taskId', 'userId']
-		}
+		},
+		order: [['createdAt', 'ASC']]
 	})
 	return userTasks
 }
 
+const getAllByTaskSetNotClosed = async () => {
+	const userTasks = await UserTask.findAll({
+		include: [
+			{
+				model: Task,
+				required: true,
+				attributes: ['id', 'description', "sector"],
+			},
+			{
+				model: User,
+				required: true,
+				attributes: ['id', 'firstName', 'lastName']
+			},
+			{
+				model: TaskSet,
+				required: true,
+				where: {
+					isClosed: false
+				}
+			}
+		]
+	})
+	return userTasks
+}
+
+// NO REVISADO
 const getByDate = async (date) => {
 	const userTasks = await UserTask.findAll({
 		where: {
@@ -96,7 +127,7 @@ const getByDate = async (date) => {
 	return userTasks
 }
 
-// Obtener usertasks entre dos fechas
+// REVISADO
 const getByRangeOfDates = async (userId, startDate, endDate) => {
 	const userTasks = await UserTask.findAll({
 		where: {
@@ -115,17 +146,57 @@ const getByRangeOfDates = async (userId, startDate, endDate) => {
 				model: User,
 				required: true,
 				attributes: ['id', 'firstName', 'lastName']
+			},
+			{
+				model: TaskSet,
+				required: true,
+				attributes: ['id', 'shift', 'observations', 'isClosed'],
 			}
 		],
 		attributes: {
-			exclude: ['updatedAt', 'taskId', 'userId']
+			exclude: ['updatedAt', 'taskId', 'userId', 'taskSetId']
 		},
 		order: [['createdAt', 'ASC']]
 	})
 	return userTasks
 }
 
-// Permite ver todas las tareas asignadas a un usuario
+// REVISADO
+const getByUserIdDateAndShift = async (userId, date, shift) => {
+	const userTasks = await UserTask.findAll({
+		where: {
+			createdAt: date,
+			userId
+		},
+		include: [
+			{
+				model: Task,
+				required: true,
+				attributes: ['id', 'description', "sector"],
+			},
+			{
+				model: User,
+				required: true,
+				attributes: ['id', 'firstName', 'lastName']
+			},
+			{
+				model: TaskSet,
+				required: true,
+				attributes: ['id', 'shift', 'observations', 'isClosed'],
+				where: {
+					shift
+				}
+			}
+		],
+		attributes: {
+			exclude: ['updatedAt', 'taskId', 'userId', 'taskSetId']
+		},
+		order: [['createdAt', 'ASC']]
+	})
+	return userTasks
+}
+
+// NO REVISADO
 const getByTaskId = async (taskId) => {
 	const userTasks = await UserTask.findAll({
 		where: {
@@ -135,26 +206,22 @@ const getByTaskId = async (taskId) => {
 	return userTasks
 }
 
-const deleteUserTask = async (userTaskId) => {
-	const userTask = await UserTask.findByPk(userTaskId)
-	await userTask.destroy()
-}
-
-// Permite guardar un userTask
+// REVISADO
 const save = async (userTask) => {
 	await userTask.save()
 }
 
 export const userTaskRepository = {
 	createMany,
-	getById,
 	getLatestByUserIdAndTaskId,
+	getById,
 	getAll,
 	getByUserId,
-	getByUserIdAndDate,
+	getByUserIdAndTaskSet,
+	getAllByTaskSetNotClosed,
+	getByDate,
+	getByRangeOfDates,
+	getByUserIdDateAndShift,
 	getByTaskId,
 	save,
-	getByDate,
-	deleteUserTask,
-	getByRangeOfDates
 }

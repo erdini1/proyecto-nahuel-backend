@@ -2,7 +2,6 @@ import { CashRegister, User } from '../models/index.model.js'
 
 const create = async (cashRegisterData) => {
 	const cashRegister = await CashRegister.create(cashRegisterData)
-	console.log(cashRegister)
 	return cashRegister?.dataValues
 }
 

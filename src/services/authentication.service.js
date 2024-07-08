@@ -2,7 +2,9 @@ import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { comparePassword, hashPassword } from "../helpers/password.helpers.js";
 import { encode } from "../helpers/token.helper.js";
+import { taskRepository } from "../repositories/task.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
+import { userTaskRepository } from "../repositories/userTask.respository.js";
 
 const create = async (userData) => {
 	try {
@@ -11,13 +13,27 @@ const create = async (userData) => {
 		const user = await userRepository.findUserByNumber(number);
 		if (user) throw new ApiError("El numero de empleado ya se encuentra registrado", HTTP_STATUSES.BAD_REQUEST)
 
-		return await userRepository.create({
+		const tasks = await taskRepository.getAll();
+		const generalTasks = tasks.filter(task => task.sector === 'general');
+
+		const newUser = await userRepository.create({
 			firstName,
 			lastName,
 			number,
 			password,
 			role
 		});
+
+		// TODO: Modificar el turno
+		const checklistItems = generalTasks.map(task => ({
+			taskId: task.id,
+			isCompleted: false,
+			userId: newUser.id,
+			shift: 'mañana'
+		}));
+		await userTaskRepository.createMany(checklistItems);
+
+		return newUser
 	} catch (error) {
 		throw error
 	}

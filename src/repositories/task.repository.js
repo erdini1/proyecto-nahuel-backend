@@ -6,7 +6,11 @@ const create = async (taskData) => {
 }
 
 const getAll = async () => {
-	const tasks = await Task.findAll()
+	const tasks = await Task.findAll(
+		{
+			order: [['description', 'ASC']]
+		}
+	)
 	return tasks
 }
 

@@ -1,6 +1,7 @@
 import { HTTP_STATUSES } from '../constants/http.constant.js';
 import { userTaskService } from '../services/userTask.service.js';
 
+// REVISADO
 const create = async (req, res, next) => {
 	try {
 		const userTask = await userTaskService.create(req.body);
@@ -10,6 +11,7 @@ const create = async (req, res, next) => {
 	}
 }
 
+// REVISADO
 const markTaskAsCompleted = async (req, res, next) => {
 	try {
 		const user = req.user
@@ -20,6 +22,7 @@ const markTaskAsCompleted = async (req, res, next) => {
 	}
 }
 
+// NO REVISADO
 const getAll = async (req, res, next) => {
 	try {
 		const userTasks = await userTaskService.getAll();
@@ -29,6 +32,7 @@ const getAll = async (req, res, next) => {
 	}
 }
 
+// NO REVISADO
 const getByUserId = async (req, res, next) => {
 	try {
 		const userTasks = await userTaskService.getByUserId(req.params.userId);
@@ -38,16 +42,18 @@ const getByUserId = async (req, res, next) => {
 	}
 }
 
-const getByUserIdAndDate = async (req, res, next) => {
+// REVISADO
+const getByUserIdAndTaskSet = async (req, res, next) => {
 	try {
 		const userId = req.query.userId || req.user.id;
-		const userTasks = await userTaskService.getByUserIdAndDate(+userId, req.query.date);
+		const userTasks = await userTaskService.getByUserIdAndTaskSet(+userId);
 		res.status(HTTP_STATUSES.OK).json(userTasks);
 	} catch (error) {
 		next(error)
 	}
 }
 
+// NO REVISADO
 const getByDate = async (req, res, next) => {
 	try {
 		const userTasks = await userTaskService.getByDate(req.query.date);
@@ -57,6 +63,16 @@ const getByDate = async (req, res, next) => {
 	}
 }
 
+const getAllByTaskSetNotClosed = async (req, res, next) => {
+	try {
+		const userTasks = await userTaskService.getAllByTaskSetNotClosed();
+		res.status(HTTP_STATUSES.OK).json(userTasks);
+	} catch (error) {
+		next(error)
+	}
+}
+
+// NO REVISADO
 const getByRangeOfDates = async (req, res, next) => {
 	try {
 		const userTasks = await userTaskService.getByRangeOfDates(req.query.userId, req.query.startDate, req.query.endDate);
@@ -66,7 +82,16 @@ const getByRangeOfDates = async (req, res, next) => {
 	}
 }
 
-// TODO: me falto ver este
+const getByUserIdDateAndShift = async (req, res, next) => {
+	try {
+		const userTasks = await userTaskService.getByUserIdDateAndShift(req.query.userId, req.query.date, req.query.shift);
+		res.status(HTTP_STATUSES.OK).json(userTasks);
+	} catch (error) {
+		next(error)
+	}
+}
+
+// NO REVISADO
 const getByTaskId = async (req, res, next) => {
 	try {
 		const userTasks = await userTaskService.getByTaskId(req.params.taskId);
@@ -76,6 +101,7 @@ const getByTaskId = async (req, res, next) => {
 	}
 }
 
+// REVISADO
 const deleteUserTask = async (req, res, next) => {
 	try {
 		await userTaskService.deleteUserTask(req.params.userTaskId);
@@ -90,9 +116,11 @@ export const userTaskController = {
 	markTaskAsCompleted,
 	getAll,
 	getByUserId,
-	getByUserIdAndDate,
-	getByTaskId,
+	getByUserIdAndTaskSet,
 	getByDate,
+	getAllByTaskSetNotClosed,
+	getByRangeOfDates,
+	getByUserIdDateAndShift,
+	getByTaskId,
 	deleteUserTask,
-	getByRangeOfDates
 }

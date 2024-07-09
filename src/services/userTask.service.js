@@ -131,6 +131,7 @@ const getByRangeOfDates = async (userId, startDate, endDate) => {
 	}
 }
 
+// REVISADO
 const getByUserIdDateAndShift = async (userId, date, shift) => {
 	try {
 		console.log(userId, date, shift)

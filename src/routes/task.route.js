@@ -4,7 +4,6 @@ import { taskController } from "../controllers/task.controller.js"
 
 const router = express.Router()
 
-// TODO: Implementar ruta para eliminar tarea
 router.get("/", isAdmin, taskController.getAll)
 router.post("/", isAdmin, taskController.create)
 router.get("/:id", isAdmin, taskController.getById)

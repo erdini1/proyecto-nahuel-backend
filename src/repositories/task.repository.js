@@ -1,4 +1,4 @@
-import { Task } from '../models/index.model.js'
+import { Task, Sector } from '../models/index.model.js'
 
 const create = async (taskData) => {
 	const task = await Task.create(taskData)
@@ -6,11 +6,19 @@ const create = async (taskData) => {
 }
 
 const getAll = async () => {
-	const tasks = await Task.findAll(
-		{
-			order: [['description', 'ASC']]
-		}
-	)
+	const tasks = await Task.findAll({
+		include: [
+			{
+				model: Sector,
+				required: true,
+				attributes: ['id', 'name'],
+			},
+		],
+		attributes: {
+			exclude: ['updatedAt', 'createdAt', 'sectorId']
+		},
+		order: [['description', 'ASC']]
+	})
 	return tasks
 }
 

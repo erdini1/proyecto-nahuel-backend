@@ -54,7 +54,7 @@ const getById = async (terminalId) => {
 
 const update = async (terminalId, terminalData) => {
 	try {
-		const { terminalNumber, description } = terminalData; // TODO: Revisar los campos que quiero modificar
+		const { terminalNumber, description } = terminalData;
 
 		const terminal = await terminalRepository.getById(terminalId);
 		if (!terminal) throw new ApiError("La terminal no existe", HTTP_STATUSES.NOT_FOUND);

@@ -2,19 +2,31 @@ import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { comparePassword, hashPassword } from "../helpers/password.helpers.js";
 import { encode } from "../helpers/token.helper.js";
+import UserSector from "../models/userSector.js";
 import { taskRepository } from "../repositories/task.repository.js";
+import { taskSetRepository } from "../repositories/taskSet.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
+import { userSectorRepository } from "../repositories/userSector.repository.js";
 import { userTaskRepository } from "../repositories/userTask.respository.js";
 
 const create = async (userData) => {
 	try {
-		const { firstName, lastName, number, password, role } = userData;
+		const { firstName, lastName, number, password, role, sectors } = userData;
 
 		const user = await userRepository.findUserByNumber(number);
-		if (user) throw new ApiError("El numero de empleado ya se encuentra registrado", HTTP_STATUSES.BAD_REQUEST)
+		if (user) throw new ApiError("El numero de empleado ya se encuentra registrado", HTTP_STATUSES.BAD_REQUEST);
 
 		const tasks = await taskRepository.getAll();
-		const generalTasks = tasks.filter(task => task.sector === 'general');
+		let generalTasks = [];
+		if (tasks && tasks.length > 0) generalTasks = tasks.filter(task => task.sector === 'general');
+
+		let sectorTasks = [];
+		if (sectors && sectors.length > 0) {
+			for (const sector of sectors) {
+				const sectorSpecificTasks = tasks.filter(task => task.sector === sector);
+				sectorTasks = sectorTasks.concat(sectorSpecificTasks);
+			}
+		}
 
 		const newUser = await userRepository.create({
 			firstName,
@@ -24,20 +36,38 @@ const create = async (userData) => {
 			role
 		});
 
-		// TODO: Modificar el turno
-		const checklistItems = generalTasks.map(task => ({
+		if (role === 'admin') return newUser;
+
+		if (sectors && sectors.length > 0) {
+			const userSectorRecords = sectors.map(sector => ({
+				userId: newUser.id,
+				sectorId: sector.id
+			}));
+			await userSectorRepository.createMany(userSectorRecords);
+		}
+
+		const allTasks = [...generalTasks, ...sectorTasks];
+
+		let taskSet = await taskSetRepository.getLastestById(newUser.id);
+		if (!taskSet || taskSet.isClosed) {
+			taskSet = await taskSetRepository.create({ userId: newUser.id, shift: "" });
+		}
+
+		const checklistItems = allTasks.map(task => ({
 			taskId: task.id,
 			isCompleted: false,
 			userId: newUser.id,
-			shift: 'mañana'
+			taskSetId: taskSet.id
 		}));
 		await userTaskRepository.createMany(checklistItems);
 
-		return newUser
+		return newUser;
 	} catch (error) {
-		throw error
+		throw error;
 	}
 };
+
+
 
 const update = async (userId, userData) => {
 	try {
@@ -84,7 +114,6 @@ const login = async (userData) => {
 	}
 }
 
-// TODO: Ver bien los temas de Seguridad, solo el administrador debe poder cambiar la contraseña de un empleado.
 const forgotPassword = async (userNumber, userData) => {
 	const { password } = userData;
 	const user = await userRepository.findUserByNumber(userNumber);

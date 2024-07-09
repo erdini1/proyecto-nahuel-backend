@@ -1,8 +1,5 @@
 import { userRepository } from "../repositories/user.repository.js";
 
-// TODO: Implementar funcionalidad para eliminar un usuario logicamente.
-// TODO: Implementar funcionalidad para modificar el role del usuario
-
 const getAll = async () => {
 	try {
 		return await userRepository.getAll();

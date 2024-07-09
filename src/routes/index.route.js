@@ -9,6 +9,7 @@ import providerRouter from "./provider.route.js"
 import cashMovementRouter from "./cashMovement.route.js"
 import cancellationRouter from "./cancellation.route.js"
 import taskSetRouter from "./taskSet.route.js"
+import sectorRouter from "./sector.route.js"
 
 const router = express.Router()
 
@@ -22,5 +23,6 @@ router.use("/provider", providerRouter)
 router.use("/cash-movement", cashMovementRouter)
 router.use("/cancellation", cancellationRouter)
 router.use("/task-set", taskSetRouter)
+router.use("/sector", sectorRouter)
 
 export default router

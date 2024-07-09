@@ -11,7 +11,7 @@ const create = async (taskData) => {
 
 		return await taskRepository.create({
 			description,
-			sector
+			sectorId: sector
 		});
 	} catch (error) {
 		throw error
@@ -34,7 +34,7 @@ const update = async (taskId, taskData) => {
 		if (!task) throw new ApiError("La tarea no existe", HTTP_STATUSES.NOT_FOUND);
 
 		task.description = description || task.description;
-		task.sector = sector || task.sector;
+		task.sectorId = sector || task.sectorId;
 
 		await taskRepository.save(task);
 		return task;

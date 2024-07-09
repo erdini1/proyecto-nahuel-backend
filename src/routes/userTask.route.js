@@ -6,9 +6,7 @@ const router = express.Router()
 
 router.post("/", isAdmin, userTaskController.create) // REVISADO
 router.get("/", isAdmin, userTaskController.getAll) // NO REVISADO
-// router.get("/date", isAuthenticated, userTaskController.getByUserIdAndTaskSet) // TODO: Eliminar cuando no se use mas
 router.get("/user/task-set", isAuthenticated, userTaskController.getByUserIdAndTaskSet) // REVISADO
-// router.get("/date/all", isAuthenticated, userTaskController.getByDate) // TODO: Eliminar cuando no se use mas
 router.get("/task-set", isAuthenticated, userTaskController.getAllByTaskSetNotClosed) // REVISADO
 router.get("/date/range", isAdmin, userTaskController.getByRangeOfDates) // REVISADO
 router.get("/date/shift", isAdmin, userTaskController.getByUserIdDateAndShift) // REVISADO

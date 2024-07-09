@@ -8,13 +8,13 @@ const create = async (taskSetData) => {
 
 // REVISADO
 const getLastestById = async (userId) => {
-	const task = await TaskSet.findOne({
+	const taskSet = await TaskSet.findOne({
 		where: {
 			userId
 		},
 		order: [['createdAt', 'DESC']]
 	})
-	return task
+	return taskSet
 }
 
 // REVISADO

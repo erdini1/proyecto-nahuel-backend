@@ -18,7 +18,7 @@ const create = async (cashMovementData) => {
 		return await cashMovementRepository.create({
 			type,
 			amount,
-			time: formatDate(new Date()),	// TODO: Ver que dato toma de aca
+			time: formatDate(new Date()),
 			cashRegisterId,
 			providerId
 		})

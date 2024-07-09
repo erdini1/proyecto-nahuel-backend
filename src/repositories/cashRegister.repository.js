@@ -11,7 +11,7 @@ const getAll = async () => {
 			{
 				model: User,
 				required: true,
-				attributes: ['id', 'firstName', 'lastName'] // TODO: revisar los campos que quiero mostrar
+				attributes: ['id', 'firstName', 'lastName']
 			}
 		],
 		attributes: {
@@ -27,7 +27,7 @@ const getById = async (cashRegisterId) => {
 			{
 				model: User,
 				required: true,
-				attributes: ['id', 'firstName', 'lastName'] // TODO: revisar los campos que quiero mostrar
+				attributes: ['id', 'firstName', 'lastName']
 			}
 		],
 		attributes: {

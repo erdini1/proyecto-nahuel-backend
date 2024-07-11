@@ -8,7 +8,7 @@ import Provider from './provider.model.js';
 import Terminal from './Terminal.model.js';
 import TaskSet from './taskSet.model.js';
 import Sector from './sector.model.js';
-import UserSector from './userSector.js';
+import UserSector from './userSector.model.js';
 
 // A.hasOne(B); // B HasOne A - Se lee de derecha a izquierda
 // A.belongsTo(B); // A BelongsTo B - Se lee de izquierda a derecha

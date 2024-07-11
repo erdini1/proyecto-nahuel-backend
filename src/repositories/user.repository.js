@@ -1,4 +1,4 @@
-import { Task, User } from '../models/index.model.js'
+import { Sector, Task, User } from '../models/index.model.js'
 
 const create = async (userData) => {
 	const user = await User.create(userData)
@@ -20,7 +20,14 @@ const getById = async (userId) => {
 	const user = await User.findByPk(userId, {
 		where: {
 			isActive: true
-		}
+		},
+		include: [
+			{
+				model: Sector,
+				required: true,
+				attributes: ['id', 'name'],
+			},
+		],
 	})
 	return user
 }
@@ -31,9 +38,23 @@ const save = async (user) => {
 
 const getAll = async () => {
 	const users = await User.findAll({
+		include: [
+			{
+				model: Sector,
+				required: true,
+				attributes: ['id', 'name'],
+				through: {
+					attributes: []
+				},
+			},
+		],
+		attributes: {
+			exclude: ['updatedAt', 'createdAt',]
+		},
 		where: {
 			isActive: true,
-		}
+		},
+		order: [['firstName', 'ASC']]
 	})
 	return users
 }

@@ -1,8 +1,8 @@
 import { HTTP_STATUSES } from "../constants/http.constant.js";
+import { ROLE } from "../constants/role.constants.js";
 import ApiError from "../errors/api.error.js";
 import { comparePassword, hashPassword } from "../helpers/password.helpers.js";
 import { encode } from "../helpers/token.helper.js";
-import UserSector from "../models/userSector.js";
 import { taskRepository } from "../repositories/task.repository.js";
 import { taskSetRepository } from "../repositories/taskSet.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
@@ -11,7 +11,7 @@ import { userTaskRepository } from "../repositories/userTask.respository.js";
 
 const create = async (userData) => {
 	try {
-		const { firstName, lastName, number, password, role, sectors } = userData;
+		const { firstName, lastName, number, password, sectors } = userData;
 
 		const user = await userRepository.findUserByNumber(number);
 		if (user) throw new ApiError("El numero de empleado ya se encuentra registrado", HTTP_STATUSES.BAD_REQUEST);
@@ -27,6 +27,8 @@ const create = async (userData) => {
 				sectorTasks = sectorTasks.concat(sectorSpecificTasks);
 			}
 		}
+
+		const role = sectors.find(sector => sector.name === 'Caja') ? ROLE.CASHIER : ROLE.EMPLOYEE;
 
 		const newUser = await userRepository.create({
 			firstName,
@@ -71,7 +73,7 @@ const create = async (userData) => {
 
 const update = async (userId, userData) => {
 	try {
-		const { firstName, lastName, number, password, role } = userData;
+		const { firstName, lastName, number, password, role, sectors } = userData;
 
 		const user = await userRepository.getById(userId);
 		if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
@@ -81,6 +83,12 @@ const update = async (userId, userData) => {
 		user.number = number || user.number;
 		user.password = password ? await hashPassword(password) : user.password;
 		user.role = role || user.role;
+
+		sectors.find(sector => sector.name === 'Caja') ? user.role = ROLE.CASHIER : user.role = ROLE.EMPLOYEE;
+
+		if (sectors && Array.isArray(sectors)) {
+			await user.setSectors(sectors.map(sector => sector.id));
+		}
 
 		await userRepository.save(user);
 		return user;

@@ -1,6 +1,7 @@
 import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { taskSetRepository } from "../repositories/taskSet.repository.js";
+import { userTaskRepository } from "../repositories/userTask.respository.js";
 
 const create = async (taskSetData, userId) => {
 	try {
@@ -23,6 +24,7 @@ const getLastestById = async (userId) => {
 	}
 }
 
+// TODO: Terminar de implementar la opción para agregar tareas a un nuevo conjunto de tareas
 const update = async (userId, taskSetData) => {
 	try {
 		const { shift, observations, isClosed } = taskSetData
@@ -32,6 +34,18 @@ const update = async (userId, taskSetData) => {
 		taskSet.shift = shift || taskSet.shift
 		taskSet.observations = observations || taskSet.observations
 		taskSet.isClosed = isClosed || taskSet.isClosed
+		// if (isClosed) {
+		// 	const lastTaskSet = await taskSetRepository.getLastestById(userId)
+		// 	const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, lastTaskSet.id)
+		// 	const taskSet = await taskSetRepository.create({ userId, shift: "" })
+
+		// 	const checklistItems = userTasks.map(taskId => ({
+		// 		taskId,
+		// 		isCompleted: false,
+		// 		userId,
+		// 		taskSetId: taskSet.id
+		// 	}))
+		// }
 
 		await taskSetRepository.save(taskSet)
 	} catch (error) {

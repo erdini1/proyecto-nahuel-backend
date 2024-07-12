@@ -16,6 +16,10 @@ const UserTask = sequelize.define("UserTask", {
 		allowNull: false,
 		defaultValue: true,
 	},
+	kilos: {
+		type: DataTypes.FLOAT,
+		allowNull: true,
+	},
 	createdAt: {
 		type: DataTypes.DATEONLY,
 		allowNull: false,

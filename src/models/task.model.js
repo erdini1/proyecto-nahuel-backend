@@ -6,6 +6,10 @@ const Task = sequelize.define("Task", {
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
+	type: {
+		type: DataTypes.ENUM('general', 'elaboration'),
+		allowNull: false,
+	},
 })
 
 export default Task

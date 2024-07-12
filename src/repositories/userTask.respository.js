@@ -53,7 +53,7 @@ const getByUserIdAndTaskSet = async (userId, taskSetId) => {
 			{
 				model: Task,
 				required: true,
-				attributes: ['id', 'description'],
+				attributes: ['id', 'description', "type"],
 			},
 			{
 				model: User,
@@ -83,7 +83,7 @@ const getAllByTaskSetNotClosed = async () => {
 			{
 				model: Task,
 				required: true,
-				attributes: ['id', 'description'],
+				attributes: ['id', 'description', "type"],
 			},
 			{
 				model: User,
@@ -112,7 +112,7 @@ const getByDate = async (date) => {
 			{
 				model: Task,
 				required: true,
-				attributes: ['id', 'description'],
+				attributes: ['id', 'description', "type"],
 			},
 			{
 				model: User,
@@ -140,7 +140,7 @@ const getByRangeOfDates = async (userId, startDate, endDate) => {
 			{
 				model: Task,
 				required: true,
-				attributes: ['id', 'description'],
+				attributes: ['id', 'description', "type"],
 			},
 			{
 				model: User,
@@ -172,7 +172,7 @@ const getByUserIdDateAndShift = async (userId, date, shift) => {
 			{
 				model: Task,
 				required: true,
-				attributes: ['id', 'description'],
+				attributes: ['id', 'description', "type"],
 			},
 			{
 				model: User,

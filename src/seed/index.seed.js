@@ -1,6 +1,6 @@
 // import { User } from "../models/index.model.js"
-// import { Task } from "../models/index.model.js"
-import { UserTask } from "../models/index.model.js"
+import { Task } from "../models/index.model.js"
+// import { UserTask } from "../models/index.model.js"
 import users from "./user.seed.js";
 import userTasks from "./userTask.seed.js";
 import tasks from "./task.seed.js";
@@ -11,8 +11,8 @@ const importData = async () => {
 		await sequelize.authenticate()
 		await sequelize.sync()
 		// await User.bulkCreate(users)
-		// await Task.bulkCreate(tasks)
-		await UserTask.bulkCreate(userTasks)
+		await Task.bulkCreate(tasks)
+		// await UserTask.bulkCreate(userTasks)
 		console.log("Datos importados correctamente")
 		process.exit()
 

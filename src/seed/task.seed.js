@@ -1,60 +1,73 @@
-
 const tasks = [
 	{
 		description: "Marcar llegada",
-		sector: "general"
+		sectorId: 3,
+		type: "general"
 	},
 	{
 		description: "Alteraciones de precios para el día y sus carteles",
-		sector: "general"
+		sectorId: 3,
+		type: "general"
 	},
 	{
 		description: "Mantener ofertas en la gondola, cenefas y pizarrones externos-internos",
-		sector: "general"
+		sectorId: 3,
+		type: "general"
 	},
 	{
 		description: "Limpieza baño del personal / Sector de descanso y escales. según cronograma de la empresa",
-		sector: "general"
+		sectorId: 3,
+		type: "general"
 	},
 	{
 		description: "Reponer mercaderia siempre verticalizando de acuerdo al planograma de la empresa",
-		sector: "general"
+		sectorId: 3,
+		type: "general"
 	},
 	{
 		description: "ATENDER PROVEEDORES SEGUN PLANILLA,Ultimo turno debe guardar planilla y retiro en el buzon",
-		sector: "caja"
+		sectorId: 1,
+		type: "general"
 	},
 	{
 		description: "ATENCION AL CLIENTE (Amabilidad, Eficácia y Organizacion)",
-		sector: "caja"
+		sectorId: 1,
+		type: "general"
 	},
 	{
 		description: "HIGIENE Y ORGANIZACION DEL SECTOR  (Cajas, mostrador,monitor Piso, Vidrios, Alfombras, Entrada del local)",
-		sector: "caja"
+		sectorId: 1,
+		type: "general"
 	},
 	{
 		description: "REPOSICION BOLSAS FRISELINA-PRECIFICADO",
-		sector: "caja"
+		sectorId: 5,
+		type: "general"
 	},
 	{
 		description: "PRESENTACION DEL EQUIPO-CORTESIA  (Uniformes, Apariencia personal, Amabilidad)",
-		sector: "caja"
+		sectorId: 3,
+		type: "general"
 	},
 	{
 		description: "Se debe mantener completa las heladeras mostrador con mercadería siempre fresca",
-		sector: "polleria"
+		sectorId: 5,
+		type: "general"
 	},
 	{
 		description: "Adelantarse al dia franco. Se debe dejar avisado cuánta cantidad de mercaderia se deja para elaboración",
-		sector: "polleria"
+		sectorId: 2,
+		type: "elaboration"
 	},
 	{
 		description: "Limpiar todos los días los vidrios de las heladeras mostrador",
-		sector: "polleria"
+		sectorId: 5,
+		type: "general"
 	},
 	{
 		description: "Ir anotando faltante de insumos en su respectiva planilla",
-		sector: "polleria"
+		sectorId: 2,
+		type: "elaboration"
 	}
 ]
 

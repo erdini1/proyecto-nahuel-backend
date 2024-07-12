@@ -29,14 +29,17 @@ const create = async (userTaskData) => {
 }
 
 // REVISADO
-const markTaskAsCompleted = async (userId, taskId) => {
+const markTaskAsCompleted = async (userId, taskId, body) => {
 	try {
+		const { kilos } = body
 		const taskSet = await taskSetRepository.getLastestById(userId)
 
 		const userTask = await userTaskRepository.getLatestByUserIdAndTaskId(userId, taskId, taskSet.id)
 		if (!userTask) throw new ApiError("La tarea no existe o no esta asignada a este usuario", HTTP_STATUSES.NOT_FOUND)
 
 		userTask.isCompleted = !userTask.isCompleted
+		userTask.kilos = kilos || userTask.kilos
+
 		await userTaskRepository.save(userTask)
 		return userTask
 	} catch (error) {

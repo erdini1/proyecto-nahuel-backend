@@ -24,7 +24,6 @@ const getLastestById = async (userId) => {
 	}
 }
 
-// TODO: Terminar de implementar la opción para agregar tareas a un nuevo conjunto de tareas
 const update = async (userId, taskSetData) => {
 	try {
 		const { shift, observations, isClosed } = taskSetData
@@ -34,19 +33,19 @@ const update = async (userId, taskSetData) => {
 		taskSet.shift = shift || taskSet.shift
 		taskSet.observations = observations || taskSet.observations
 		taskSet.isClosed = isClosed || taskSet.isClosed
-		// if (isClosed) {
-		// 	const lastTaskSet = await taskSetRepository.getLastestById(userId)
-		// 	const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, lastTaskSet.id)
-		// 	const taskSet = await taskSetRepository.create({ userId, shift: "" })
 
-		// 	const checklistItems = userTasks.map(taskId => ({
-		// 		taskId,
-		// 		isCompleted: false,
-		// 		userId,
-		// 		taskSetId: taskSet.id
-		// 	}))
-		// }
+		if (isClosed) {
+			const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id)
+			const newTaskSet = await taskSetRepository.create({ userId, shift: "" })
 
+			const checklistItems = userTasks.map(userTask => ({
+				taskId: userTask.Task.id,
+				isCompleted: false,
+				userId,
+				taskSetId: newTaskSet.id
+			}))
+			await userTaskRepository.createMany(checklistItems)
+		}
 		await taskSetRepository.save(taskSet)
 	} catch (error) {
 		throw error

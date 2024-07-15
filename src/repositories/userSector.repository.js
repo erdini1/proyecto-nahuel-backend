@@ -5,6 +5,11 @@ const createMany = async (sectorData) => {
 	return userSector
 }
 
+const create = async (sectorData) => {
+	const userSector = await UserSector.create(sectorData)
+	return userSector
+}
+
 const getAll = async () => {
 	const userSectors = await UserSector.findAll({
 		include: [
@@ -25,5 +30,6 @@ const getAll = async () => {
 
 export const userSectorRepository = {
 	createMany,
-	getAll
+	create,
+	getAll,
 }

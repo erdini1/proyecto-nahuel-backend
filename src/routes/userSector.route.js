@@ -5,5 +5,6 @@ import { userSectorController } from "../controllers/userSector.controller.js"
 const router = express.Router()
 
 router.get("/", isAdmin, userSectorController.getAll)
+router.post("/", isAuthenticated, userSectorController.create)
 
 export default router

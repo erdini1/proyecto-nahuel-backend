@@ -3,6 +3,7 @@ import { ROLE } from "../constants/role.constants.js";
 import ApiError from "../errors/api.error.js";
 import { comparePassword, hashPassword } from "../helpers/password.helpers.js";
 import { encode } from "../helpers/token.helper.js";
+import { sectorRepository } from "../repositories/sector.repository.js";
 import { taskRepository } from "../repositories/task.repository.js";
 import { taskSetRepository } from "../repositories/taskSet.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
@@ -69,31 +70,30 @@ const create = async (userData) => {
 	}
 };
 
-
-
 const update = async (userId, userData) => {
 	try {
-		const { firstName, lastName, number, password, role, sectors } = userData;
+		const { firstName, lastName, number, password, Sectors } = userData;
 
 		const user = await userRepository.getById(userId);
-		if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
+		if (!user) throw new ApiError("El empleado no se encuentra registrado", 404);
 
 		user.firstName = firstName || user.firstName;
 		user.lastName = lastName || user.lastName;
 		user.number = number || user.number;
-		user.password = password ? await hashPassword(password) : user.password;
-		user.role = role || user.role;
+		if (password) user.password = await hashPassword(password);
+		Sectors.find(sector => sector.name === 'Caja') ? user.role = ROLE.CASHIER : user.role = ROLE.EMPLOYEE;
 
-		sectors.find(sector => sector.name === 'Caja') ? user.role = ROLE.CASHIER : user.role = ROLE.EMPLOYEE;
+		const currentSectors = await user.getSectors();
+		const newSectors = await sectorRepository.getAllBySectorIds(Sectors.map(sector => sector.id));
 
-		if (sectors && Array.isArray(sectors)) {
-			await user.setSectors(sectors.map(sector => sector.id));
-		}
+		await user.removeSectors(currentSectors);
+		await user.addSectors(newSectors);
 
 		await userRepository.save(user);
 		return user;
 	} catch (error) {
-		throw error
+		console.error('Error updating user:', error);
+		throw new ApiError(error.message, error.status || 500);
 	}
 };
 

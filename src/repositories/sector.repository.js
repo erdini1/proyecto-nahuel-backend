@@ -1,4 +1,4 @@
-import { Sector } from '../models/index.model.js'
+import { Sector, User } from '../models/index.model.js'
 
 const create = async (sectorData) => {
 	const sector = await Sector.create(sectorData)
@@ -12,7 +12,17 @@ const getAll = async () => {
 	return sectors
 }
 
+const getAllBySectorIds = async (sectorIds) => {
+	const userSectors = await Sector.findAll({
+		where: {
+			id: sectorIds
+		},
+	})
+	return userSectors
+}
+
 export const sectorRepository = {
 	create,
-	getAll
+	getAll,
+	getAllBySectorIds
 }

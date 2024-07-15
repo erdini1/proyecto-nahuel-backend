@@ -7,7 +7,7 @@ import { userTaskRepository } from "../repositories/userTask.respository.js"
 // REVISADO
 const create = async (userTaskData) => {
 	try {
-		const { userId, taskIds } = userTaskData
+		const { userId, taskIds, periodicity } = userTaskData
 		const user = await userRepository.getById(userId)
 		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND)
 
@@ -20,6 +20,7 @@ const create = async (userTaskData) => {
 			taskId,
 			isCompleted: false,
 			userId,
+			periodicity: periodicity || "recurring",
 			taskSetId: taskSet.id
 		}))
 		return await userTaskRepository.createMany(checklistItems)

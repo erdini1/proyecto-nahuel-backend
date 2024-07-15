@@ -20,6 +20,11 @@ const UserTask = sequelize.define("UserTask", {
 		type: DataTypes.FLOAT,
 		allowNull: true,
 	},
+	periodicity: {
+		type: DataTypes.STRING,
+		allowNull: false,
+		defaultValue: "recurring", // [daily, recurring]
+	},
 	createdAt: {
 		type: DataTypes.DATEONLY,
 		allowNull: false,

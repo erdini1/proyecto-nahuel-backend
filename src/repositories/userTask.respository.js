@@ -162,11 +162,10 @@ const getByRangeOfDates = async (userId, startDate, endDate) => {
 }
 
 // REVISADO
-const getByUserIdDateAndShift = async (userId, date, shift) => {
+const getByTaskSetId = async (taskSetId) => {
 	const userTasks = await UserTask.findAll({
 		where: {
-			createdAt: date,
-			userId
+			taskSetId
 		},
 		include: [
 			{
@@ -183,9 +182,6 @@ const getByUserIdDateAndShift = async (userId, date, shift) => {
 				model: TaskSet,
 				required: true,
 				attributes: ['id', 'shift', 'observations', 'isClosed'],
-				where: {
-					shift
-				}
 			}
 		],
 		attributes: {
@@ -221,7 +217,7 @@ export const userTaskRepository = {
 	getAllByTaskSetNotClosed,
 	getByDate,
 	getByRangeOfDates,
-	getByUserIdDateAndShift,
+	getByTaskSetId,
 	getByTaskId,
 	save,
 }

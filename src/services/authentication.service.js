@@ -10,26 +10,30 @@ import { userRepository } from "../repositories/user.repository.js";
 import { userSectorRepository } from "../repositories/userSector.repository.js";
 import { userTaskRepository } from "../repositories/userTask.respository.js";
 
+// TODO: Limpiar y refactorizar 
 const create = async (userData) => {
 	try {
-		const { firstName, lastName, number, password, sectors } = userData;
+		const { firstName, lastName, number, password, Sectors } = userData;
 
 		const user = await userRepository.findUserByNumber(number);
 		if (user) throw new ApiError("El numero de empleado ya se encuentra registrado", HTTP_STATUSES.BAD_REQUEST);
 
 		const tasks = await taskRepository.getAll();
-		let generalTasks = [];
-		if (tasks && tasks.length > 0) generalTasks = tasks.filter(task => task.sector === 'general');
 
-		let sectorTasks = [];
-		if (sectors && sectors.length > 0) {
-			for (const sector of sectors) {
-				const sectorSpecificTasks = tasks.filter(task => task.sector === sector);
-				sectorTasks = sectorTasks.concat(sectorSpecificTasks);
-			}
+		let generalTasks = [];
+		if (tasks && tasks.length > 0) {
+			generalTasks = tasks.filter(task => task.Sector.name == 'general');
 		}
 
-		const role = sectors.find(sector => sector.name === 'Caja') ? ROLE.CASHIER : ROLE.EMPLOYEE;
+		let sectorTasks = [];
+		let role = ROLE.EMPLOYEE;
+		if (Sectors && Sectors.length > 0) {
+			for (const sector of Sectors) {
+				const sectorSpecificTasks = tasks.filter(task => task.Sector.name === sector.name);
+				sectorTasks = sectorTasks.concat(sectorSpecificTasks);
+			}
+			role = Sectors.find(sector => sector.name == 'caja') ? ROLE.CASHIER : ROLE.EMPLOYEE;
+		}
 
 		const newUser = await userRepository.create({
 			firstName,
@@ -39,23 +43,17 @@ const create = async (userData) => {
 			role
 		});
 
-		if (role === 'admin') return newUser;
-
-		if (sectors && sectors.length > 0) {
-			const userSectorRecords = sectors.map(sector => ({
+		if (Sectors && Sectors.length > 0) {
+			const userSectorRecords = Sectors.map(sector => ({
 				userId: newUser.id,
 				sectorId: sector.id
 			}));
 			await userSectorRepository.createMany(userSectorRecords);
 		}
 
+		const taskSet = await taskSetRepository.create({ userId: newUser.id, shift: "" });
+
 		const allTasks = [...generalTasks, ...sectorTasks];
-
-		let taskSet = await taskSetRepository.getLastestById(newUser.id);
-		if (!taskSet || taskSet.isClosed) {
-			taskSet = await taskSetRepository.create({ userId: newUser.id, shift: "" });
-		}
-
 		const checklistItems = allTasks.map(task => ({
 			taskId: task.id,
 			isCompleted: false,
@@ -70,6 +68,7 @@ const create = async (userData) => {
 	}
 };
 
+// TODO: Hacer que cuando se modifique el sector de un usuario, se le asignen las tareas correspondientes y se eliminen las tareas que no correspondan
 const update = async (userId, userData) => {
 	try {
 		const { firstName, lastName, number, password, Sectors } = userData;
@@ -80,8 +79,9 @@ const update = async (userId, userData) => {
 		user.firstName = firstName || user.firstName;
 		user.lastName = lastName || user.lastName;
 		user.number = number || user.number;
-		if (password) user.password = await hashPassword(password);
-		Sectors.find(sector => sector.name === 'Caja') ? user.role = ROLE.CASHIER : user.role = ROLE.EMPLOYEE;
+
+		if (password && password !== user.password) user.password = await hashPassword(password);
+		Sectors.find(sector => sector.name === 'caja') ? user.role = ROLE.CASHIER : user.role = ROLE.EMPLOYEE;
 
 		const currentSectors = await user.getSectors();
 		const newSectors = await sectorRepository.getAllBySectorIds(Sectors.map(sector => sector.id));
@@ -92,8 +92,7 @@ const update = async (userId, userData) => {
 		await userRepository.save(user);
 		return user;
 	} catch (error) {
-		console.error('Error updating user:', error);
-		throw new ApiError(error.message, error.status || 500);
+		throw error;
 	}
 };
 
@@ -123,20 +122,28 @@ const login = async (userData) => {
 }
 
 const forgotPassword = async (userNumber, userData) => {
-	const { password } = userData;
-	const user = await userRepository.findUserByNumber(userNumber);
-	if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
-	user.password = await hashPassword(password);
-	await userRepository.save(user);
-	return user;
+	try {
+		const { password } = userData;
+		const user = await userRepository.findUserByNumber(userNumber);
+		if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
+		user.password = await hashPassword(password);
+		await userRepository.save(user);
+		return user;
+	} catch (error) {
+		throw error;
+	}
 }
 
 const deleteById = async (userId) => {
-	const user = await userRepository.getById(userId);
-	if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
-	user.isActive = false;
-	await userRepository.save(user);
-	return user;
+	try {
+		const user = await userRepository.getById(userId);
+		if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
+		user.isActive = false;
+		await userRepository.save(user);
+		return user;
+	} catch (error) {
+		throw error;
+	}
 }
 
 export const authenticationService = {

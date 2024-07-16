@@ -136,10 +136,9 @@ const getByRangeOfDates = async (userId, startDate, endDate) => {
 }
 
 // REVISADO
-const getByUserIdDateAndShift = async (userId, date, shift) => {
+const getByTaskSetId = async (taskSetId) => {
 	try {
-		console.log(userId, date, shift)
-		const userTasks = await userTaskRepository.getByUserIdDateAndShift(userId, date, shift)
+		const userTasks = await userTaskRepository.getByTaskSetId(taskSetId)
 		return userTasks
 	} catch (error) {
 		throw error
@@ -180,7 +179,7 @@ export const userTaskService = {
 	getAllByTaskSetNotClosed,
 	getMyLastTasks,
 	getByRangeOfDates,
-	getByUserIdDateAndShift,
+	getByTaskSetId,
 	getByTaskId,
 	deleteUserTask,
 }

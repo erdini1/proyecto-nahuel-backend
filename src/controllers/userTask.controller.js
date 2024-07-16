@@ -81,9 +81,9 @@ const getByRangeOfDates = async (req, res, next) => {
 	}
 }
 
-const getByUserIdDateAndShift = async (req, res, next) => {
+const getByTaskSetId = async (req, res, next) => {
 	try {
-		const userTasks = await userTaskService.getByUserIdDateAndShift(req.query.userId, req.query.date, req.query.shift);
+		const userTasks = await userTaskService.getByTaskSetId(req.params.taskSetId);
 		res.status(HTTP_STATUSES.OK).json(userTasks);
 	} catch (error) {
 		next(error)
@@ -119,7 +119,7 @@ export const userTaskController = {
 	getByDate,
 	getAllByTaskSetNotClosed,
 	getByRangeOfDates,
-	getByUserIdDateAndShift,
+	getByTaskSetId,
 	getByTaskId,
 	deleteUserTask,
 }

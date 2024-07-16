@@ -36,9 +36,10 @@ const update = async (userId, taskSetData) => {
 
 		if (isClosed) {
 			const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id)
+			const userTasksActiveAndRecurring = userTasks.filter(userTask => userTask.periodicity === "recurring" && userTask.isActive)
 			const newTaskSet = await taskSetRepository.create({ userId, shift: "" })
 
-			const checklistItems = userTasks.map(userTask => ({
+			const checklistItems = userTasksActiveAndRecurring.map(userTask => ({
 				taskId: userTask.Task.id,
 				isCompleted: false,
 				userId,

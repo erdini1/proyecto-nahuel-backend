@@ -2,6 +2,7 @@ import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { taskRepository } from "../repositories/task.repository.js";
 
+// TODO: Hacer que cuando se crea una nueva tarea, se asigne a todos los usuarios con ese sector
 const create = async (taskData) => {
 	try {
 		const { description, sector, type } = taskData;

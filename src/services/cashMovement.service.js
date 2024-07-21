@@ -7,7 +7,7 @@ import { providerRepository } from "../repositories/provider.repository.js";
 
 const create = async (cashMovementData) => {
 	try {
-		const { type, amount, cashRegisterId, providerId } = cashMovementData
+		const { /* type, */ amount, cashRegisterId, providerId } = cashMovementData
 
 		const cashRegister = await cashRegisterRepository.getById(cashRegisterId)
 		if (!cashRegister) throw new ApiError("El registro de caja no existe", HTTP_STATUSES.NOT_FOUND)
@@ -16,7 +16,7 @@ const create = async (cashMovementData) => {
 		if (!provider) throw new ApiError("El proveedor no existe", HTTP_STATUSES.NOT_FOUND)
 
 		return await cashMovementRepository.create({
-			type,
+			type: "withdrawal",
 			amount,
 			time: formatDate(new Date()),
 			cashRegisterId,
@@ -65,7 +65,7 @@ const update = async (cashMovementId, cashMovementData) => {
 
 const getByUserId = async (userId) => {
 	try {
-		const cashRegister = await cashRegisterRepository.getByUserId(userId);
+		const cashRegister = await cashRegisterRepository.getLastByUserId(userId);
 		if (!cashRegister) return []
 
 		const cashMovements = await cashMovementRepository.getByCashRegisterId(cashRegister.id);

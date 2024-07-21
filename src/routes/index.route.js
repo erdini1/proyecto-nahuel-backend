@@ -11,6 +11,7 @@ import cancellationRouter from "./cancellation.route.js"
 import taskSetRouter from "./taskSet.route.js"
 import sectorRouter from "./sector.route.js"
 import userSectorRouter from "./userSector.route.js"
+import cashBoxRouter from "./cashBox.route.js"
 
 const router = express.Router()
 
@@ -26,5 +27,6 @@ router.use("/cancellation", cancellationRouter)
 router.use("/task-set", taskSetRouter)
 router.use("/sector", sectorRouter)
 router.use("/user-sector", userSectorRouter)
+router.use("/cash-box", cashBoxRouter)
 
 export default router

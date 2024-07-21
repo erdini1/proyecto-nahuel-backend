@@ -7,33 +7,18 @@ import { userRepository } from "../repositories/user.repository.js";
 const create = async (userId, cashRegisterData) => {
 	try {
 		const {
-			cashRegisterNumber,
 			initialAmount,
 			changeAmount,
-			/* salesWithCash,
-			salesWithCards,
-			salesWithCredit,
-			salesWithMercadoPago,
-			salesWithPointMaxiconsumo,
-			cashToRenderWithCash,
-			cashToRenderWithCards,
-			cashToRenderWithCredit,
-			cashToRenderWithMercadoPago,
-			cashToRenderWithPointMaxiconsumo, */
+			cashBoxId,
 		} = cashRegisterData
 		const user = await userRepository.getById(userId)
 		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND)
 
 		const newCashRegister = await cashRegisterRepository.create({
-			cashRegisterNumber,
 			initialAmount,
 			changeAmount,
-			/* salesWithCash,
-			salesWithCards,
-			salesWithCredit,
-			salesWithMercadoPago,
-			salesWithPointMaxiconsumo, */
-			userId
+			userId,
+			cashBoxId,
 		})
 
 		await terminalRepository.create({
@@ -70,7 +55,6 @@ const getById = async (cashRegisterId) => {
 const update = async (cashRegisterId, cashRegisterData) => {
 	try {
 		const {
-			cashRegisterNumber,
 			initialAmount,
 			changeAmount,
 			observations,
@@ -84,13 +68,13 @@ const update = async (cashRegisterId, cashRegisterData) => {
 			cashToRenderWithCredit,
 			cashToRenderWithMercadoPago,
 			cashToRenderWithPointMaxiconsumo,
+			cashBoxId,
 			isClosed
 		} = cashRegisterData;
 
 		const cashRegister = await cashRegisterRepository.getById(cashRegisterId);
 		if (!cashRegister) throw new ApiError("El registro de caja no existe", HTTP_STATUSES.NOT_FOUND);
 
-		cashRegister.cashRegisterNumber = cashRegisterNumber || cashRegister.cashRegisterNumber;
 		cashRegister.initialAmount = initialAmount || cashRegister.initialAmount;
 		cashRegister.changeAmount = changeAmount || cashRegister.changeAmount;
 		cashRegister.observations = observations || cashRegister.observations;
@@ -104,6 +88,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 		cashRegister.cashToRenderWithCredit = cashToRenderWithCredit || cashRegister.cashToRenderWithCredit;
 		cashRegister.cashToRenderWithMercadoPago = cashToRenderWithMercadoPago || cashRegister.cashToRenderWithMercadoPago;
 		cashRegister.cashToRenderWithPointMaxiconsumo = cashToRenderWithPointMaxiconsumo || cashRegister.cashToRenderWithPointMaxiconsumo;
+		cashRegister.cashBoxId = cashBoxId || cashRegister.cashBoxId;
 		cashRegister.isClosed = isClosed || cashRegister.isClosed
 
 		await cashRegisterRepository.save(cashRegister);
@@ -115,8 +100,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 
 const checkIfCashRegisterExists = async (userId) => {
 	try {
-		const date = new Date();
-		const cashRegister = await cashRegisterRepository.getByUserIdAndDate(userId, date);
+		const cashRegister = await cashRegisterRepository.getLastByUserId(userId);
 		if (!cashRegister) return false;
 		return true;
 	} catch (error) {
@@ -124,9 +108,9 @@ const checkIfCashRegisterExists = async (userId) => {
 	}
 }
 
-const getByUserId = async (userId) => {
+const getLastByUserId = async (userId) => {
 	try {
-		const cashRegister = await cashRegisterRepository.getByUserId(userId);
+		const cashRegister = await cashRegisterRepository.getLastByUserId(userId);
 		if (!cashRegister) throw new ApiError("El registro de caja no existe", HTTP_STATUSES.NOT_FOUND);
 
 		return cashRegister;
@@ -141,5 +125,5 @@ export const cashRegisterService = {
 	getById,
 	update,
 	checkIfCashRegisterExists,
-	getByUserId
+	getLastByUserId
 };

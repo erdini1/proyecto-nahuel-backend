@@ -37,18 +37,18 @@ const update = async (req, res, next) => {
 	}
 }
 
-const getByUserId = async (req, res, next) => {
+const checkIfCashRegisterExists = async (req, res, next) => {
 	try {
-		const cashRegister = await cashRegisterService.getByUserId(req.user.id);
+		const cashRegister = await cashRegisterService.checkIfCashRegisterExists(req.user.id);
 		res.status(HTTP_STATUSES.OK).json(cashRegister);
 	} catch (error) {
 		next(error)
 	}
 }
 
-const checkIfCashRegisterExists = async (req, res, next) => {
+const getLastByUserId = async (req, res, next) => {
 	try {
-		const cashRegister = await cashRegisterService.checkIfCashRegisterExists(req.user.id);
+		const cashRegister = await cashRegisterService.getLastByUserId(req.user.id);
 		res.status(HTTP_STATUSES.OK).json(cashRegister);
 	} catch (error) {
 		next(error)
@@ -60,6 +60,6 @@ export const cashRegisterController = {
 	getAll,
 	getById,
 	update,
-	getByUserId,
-	checkIfCashRegisterExists
+	checkIfCashRegisterExists,
+	getLastByUserId,
 }

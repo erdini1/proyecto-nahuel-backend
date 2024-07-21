@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.post("/", isCashier, cashRegisterController.create)
 router.get("/", isAdmin, cashRegisterController.getAll)
-router.get("/user", isCashier, cashRegisterController.getByUserId)
+router.get("/user", isCashier, cashRegisterController.getLastByUserId)
 router.get("/check", isCashier, cashRegisterController.checkIfCashRegisterExists)
 router.get("/:cashRegisterId", isAdmin, cashRegisterController.getById)
 router.put("/:cashRegisterId", isCashier, cashRegisterController.update)

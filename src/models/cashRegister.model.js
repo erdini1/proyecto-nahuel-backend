@@ -2,10 +2,10 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/db.config.js";
 
 const CashRegister = sequelize.define("CashRegister", {
-	cashRegisterNumber: {
-		type: DataTypes.INTEGER,
-		allowNull: false,
-	},
+	// cashRegisterNumber: {
+	// 	type: DataTypes.INTEGER,
+	// 	allowNull: false,
+	// },
 	date: {
 		type: DataTypes.DATEONLY,
 		allowNull: false,

@@ -61,7 +61,7 @@ const update = async (cancellationId, cancellationData) => {
 
 const getByUserId = async (userId) => {
 	try {
-		const cashRegister = await cashRegisterRepository.getByUserId(userId);
+		const cashRegister = await cashRegisterRepository.getLastByUserId(userId);
 		if (!cashRegister) return []
 
 		const cancellation = await cancellationRepository.getByCashRegisterId(cashRegister.id);

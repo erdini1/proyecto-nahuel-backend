@@ -37,9 +37,19 @@ const update = async (req, res, next) => {
 	}
 }
 
+const deleteById = async (req, res, next) => {
+	try {
+		await providerService.deleteById(req.params.providerId);
+		res.status(HTTP_STATUSES.NO_CONTENT).send();
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const providerController = {
 	create,
 	getAll,
 	getById,
 	update,
+	deleteById
 }

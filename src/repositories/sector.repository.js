@@ -27,15 +27,7 @@ const getAllBySectorIds = async (sectorIds) => {
 }
 
 const save = async (sector) => {
-	await task.save()
-}
-
-const deleteSector = async (sectorId) => {
-	await Sector.destroy({
-		where: {
-			id: sectorId
-		}
-	})
+	await sector.save()
 }
 
 export const sectorRepository = {
@@ -44,5 +36,4 @@ export const sectorRepository = {
 	getAllBySectorIds,
 	getById,
 	save,
-	deleteSector,
 }

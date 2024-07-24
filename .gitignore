@@ -2,3 +2,5 @@ node_modules
 .env
 logs.log
 user.seed.js
+config
+migrations

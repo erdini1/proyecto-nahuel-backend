@@ -6,6 +6,11 @@ const Sector = sequelize.define("Sector", {
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
+	isActive: {
+		type: DataTypes.BOOLEAN,
+		defaultValue: true,
+		allowNull: false,
+	},
 })
 
 export default Sector

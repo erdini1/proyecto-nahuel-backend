@@ -12,18 +12,18 @@ const create = async (sectorData) => {
 
 const getAll = async () => {
 	const userSectors = await UserSector.findAll({
-		include: [
-			{
-				model: User,
-				required: true,
-				attributes: ['id', 'firstName', 'lastName']
-			},
-			{
-				model: Sector,
-				required: true,
-				attributes: ['id', 'name'],
-			},
-		],
+		// include: [
+		// 	{
+		// 		model: User,
+		// 		required: true,
+		// 		attributes: ['id', 'firstName', 'lastName']
+		// 	},
+		// 	{
+		// 		model: Sector,
+		// 		required: true,
+		// 		attributes: ['id', 'name'],
+		// 	},
+		// ],
 	})
 	return userSectors
 }

@@ -47,10 +47,23 @@ const update = async (providerId, providerData) => {
 	}
 }
 
+const deleteById = async (providerId) => {
+	try {
+		const provider = await providerRepository.getById(providerId);
+		if (!provider) throw new ApiError("El proveedor no existe", HTTP_STATUSES.NOT_FOUND);
+
+		provider.isActive = false;
+
+		await providerRepository.save(provider);
+	} catch (error) {
+		throw error
+	}
+}
 
 export const providerService = {
 	create,
 	getAll,
 	getById,
 	update,
+	deleteById
 };

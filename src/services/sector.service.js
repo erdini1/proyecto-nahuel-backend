@@ -41,7 +41,9 @@ const deleteSector = async (sectorId) => {
 		const sector = await sectorRepository.getById(sectorId);
 		if (!sector) throw new ApiError("El sector no existe", HTTP_STATUSES.NOT_FOUND);
 
-		await sectorRepository.deleteSector(sectorId);
+		sector.isActive = false;
+
+		await sectorRepository.save(sector);
 	} catch (error) {
 		throw error
 	}

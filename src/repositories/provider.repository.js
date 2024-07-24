@@ -6,7 +6,9 @@ const create = async (providerData) => {
 }
 
 const getAll = async () => {
-	const providers = await Provider.findAll()
+	const providers = await Provider.findAll({
+		order: [['name', 'ASC']]
+	})
 	return providers
 }
 

@@ -8,5 +8,6 @@ router.post("/", isAdmin, providerController.create)
 router.get("/", isCashier, providerController.getAll)
 router.get("/:providerId", isAdmin, providerController.getById)
 router.put("/:providerId", isAdmin, providerController.update)
+router.delete("/:providerId", isAdmin, providerController.deleteById)
 
 export default router

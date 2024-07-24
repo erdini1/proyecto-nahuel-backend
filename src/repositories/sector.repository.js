@@ -12,6 +12,11 @@ const getAll = async () => {
 	return sectors
 }
 
+const getById = async (sectorId) => {
+	const sector = await Sector.findByPk(sectorId)
+	return sector
+}
+
 const getAllBySectorIds = async (sectorIds) => {
 	const userSectors = await Sector.findAll({
 		where: {
@@ -21,8 +26,23 @@ const getAllBySectorIds = async (sectorIds) => {
 	return userSectors
 }
 
+const save = async (sector) => {
+	await task.save()
+}
+
+const deleteSector = async (sectorId) => {
+	await Sector.destroy({
+		where: {
+			id: sectorId
+		}
+	})
+}
+
 export const sectorRepository = {
 	create,
 	getAll,
-	getAllBySectorIds
+	getAllBySectorIds,
+	getById,
+	save,
+	deleteSector,
 }

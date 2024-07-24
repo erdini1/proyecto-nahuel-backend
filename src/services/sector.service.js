@@ -20,8 +20,37 @@ const getAll = async () => {
 	}
 }
 
+const update = async (sectorId, sectorData) => {
+	try {
+		const { name } = sectorData;
+
+		const sector = await sectorRepository.getById(sectorId);
+		if (!sector) throw new ApiError("El sector no existe", HTTP_STATUSES.NOT_FOUND);
+
+		sector.name = name || sector.name;
+
+		await sectorRepository.save(sector);
+		return sector;
+	} catch (error) {
+		throw error
+	}
+}
+
+const deleteSector = async (sectorId) => {
+	try {
+		const sector = await sectorRepository.getById(sectorId);
+		if (!sector) throw new ApiError("El sector no existe", HTTP_STATUSES.NOT_FOUND);
+
+		await sectorRepository.deleteSector(sectorId);
+	} catch (error) {
+		throw error
+	}
+}
+
 export const sectorService = {
 	create,
-	getAll
+	getAll,
+	update,
+	deleteSector
 }
 

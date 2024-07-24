@@ -19,7 +19,27 @@ const getAll = async (req, res, next) => {
 	}
 }
 
+const update = async (req, res, next) => {
+	try {
+		const sector = await sectorService.update(req.params.id, req.body);
+		res.status(HTTP_STATUSES.OK).json(sector);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const deleteSector = async (req, res, next) => {
+	try {
+		await sectorService.deleteSector(req.params.id);
+		res.status(HTTP_STATUSES.NO_CONTENT).send();
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const sectorController = {
 	create,
-	getAll
+	getAll,
+	update,
+	deleteSector
 }

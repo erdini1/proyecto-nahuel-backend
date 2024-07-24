@@ -21,7 +21,8 @@ const getAll = async () => {
 		],
 		attributes: {
 			exclude: ['updatedAt', "createdAt", 'userId', 'cashBoxId']
-		}
+		},
+		order: [['date', 'DESC']]
 	})
 	return cashRegisters
 }

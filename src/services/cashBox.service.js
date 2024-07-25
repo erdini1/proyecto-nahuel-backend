@@ -50,10 +50,23 @@ const update = async (cashBoxId, cashBoxData) => {
 	}
 }
 
+const deleteById = async (cashBoxId) => {
+	try {
+		const cashBox = await cashBoxRepository.getById(cashBoxId);
+		if (!cashBox) throw new ApiError("La caja no existe", HTTP_STATUSES.NOT_FOUND);
+
+		cashBox.isActive = false;
+		await cashBoxRepository.save(cashBox);
+	} catch (error) {
+		throw error
+	}
+}
+
 
 export const cashBoxService = {
 	create,
 	getAll,
 	getById,
 	update,
+	deleteById
 };

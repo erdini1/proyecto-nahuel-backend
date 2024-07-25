@@ -20,20 +20,7 @@ const getAll = async () => {
 }
 
 const getById = async (terminalId) => {
-	const terminal = await Terminal.findByPk(terminalId, {
-		include: [
-			{
-				model: CashRegister,
-				required: true,
-				attributes: {
-					exclude: ['updatedAt', "createdAt"]
-				}
-			}
-		],
-		attributes: {
-			exclude: ['updatedAt', "createdAt", 'cashRegisterId']
-		}
-	})
+	const terminal = await Terminal.findByPk(terminalId)
 	return terminal
 }
 
@@ -66,11 +53,6 @@ const getByCashRegisterId = async (cashRegisterId) => {
 	return terminals
 }
 
-const deleteTerminal = async (terminalId) => {
-	const terminal = await Terminal.findByPk(terminalId)
-	await terminal.destroy()
-}
-
 const save = async (terminal) => {
 	await terminal.save()
 }
@@ -82,6 +64,5 @@ export const terminalRepository = {
 	getById,
 	getByDescription,
 	getByCashRegisterId,
-	deleteTerminal,
 	save,
 }

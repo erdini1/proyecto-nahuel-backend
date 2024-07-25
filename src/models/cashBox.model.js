@@ -10,6 +10,11 @@ const CashBox = sequelize.define("CashBox", {
 		type: DataTypes.BOOLEAN,
 		defaultValue: false,
 	},
+	isActive: {
+		type: DataTypes.BOOLEAN,
+		defaultValue: true,
+		allowNull: false,
+	},
 })
 
 export default CashBox

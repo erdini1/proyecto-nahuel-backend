@@ -8,5 +8,6 @@ router.post("/", isAdmin, cashBoxController.create)
 router.get("/", isCashier, cashBoxController.getAll)
 router.get("/:cashBoxId", isAdmin, cashBoxController.getById)
 router.put("/:cashBoxId", isAdmin, cashBoxController.update)
+router.delete("/:cashBoxId", isAdmin, cashBoxController.deleteById)
 
 export default router

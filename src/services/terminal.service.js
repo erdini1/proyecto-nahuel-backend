@@ -70,7 +70,6 @@ const update = async (terminalId, terminalData) => {
 	}
 }
 
-// TODO: Eliminar este de abajo
 const getByCashRegisterId = async (cashRegisterId) => {
 	try {
 		return await terminalRepository.getByCashRegisterId(cashRegisterId);
@@ -84,7 +83,8 @@ const deleteTerminal = async (terminalId) => {
 		const terminal = await terminalRepository.getById(terminalId);
 		if (!terminal) throw new ApiError("La terminal no existe", HTTP_STATUSES.NOT_FOUND);
 
-		await terminalRepository.deleteTerminal(terminalId);
+		terminal.isActive = false;
+		await terminalRepository.save(terminal);
 	} catch (error) {
 		throw error
 	}

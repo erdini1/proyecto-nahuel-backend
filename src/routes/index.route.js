@@ -12,6 +12,7 @@ import taskSetRouter from "./taskSet.route.js"
 import sectorRouter from "./sector.route.js"
 import userSectorRouter from "./userSector.route.js"
 import cashBoxRouter from "./cashBox.route.js"
+import cashRegisterTerminalsRouter from "./cashRegisterTerminals.route.js"
 
 const router = express.Router()
 
@@ -28,5 +29,6 @@ router.use("/task-set", taskSetRouter)
 router.use("/sector", sectorRouter)
 router.use("/user-sector", userSectorRouter)
 router.use("/cash-box", cashBoxRouter)
+router.use("/cash-register-terminals", cashRegisterTerminalsRouter)
 
 export default router

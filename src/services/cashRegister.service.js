@@ -1,6 +1,7 @@
 import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { cashRegisterRepository } from "../repositories/cashRegister.repository.js"
+import { cashRegisterTerminalsRepository } from "../repositories/cashRegisterTerminals.repository.js";
 import { terminalRepository } from "../repositories/terminal.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 
@@ -10,28 +11,26 @@ const create = async (userId, cashRegisterData) => {
 			initialAmount,
 			changeAmount,
 			cashBoxId,
-		} = cashRegisterData
-		const user = await userRepository.getById(userId)
-		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND)
+		} = cashRegisterData;
+
+		const user = await userRepository.getById(userId);
+		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND);
 
 		const newCashRegister = await cashRegisterRepository.create({
 			initialAmount,
 			changeAmount,
 			userId,
 			cashBoxId,
-		})
+		});
 
-		await terminalRepository.create({
-			terminalNumber: "cash",
-			description: "EFECTIVO",
-			cashRegisterId: newCashRegister.id
-		})
+		const cashTerminal = await terminalRepository.getByDescription("EFECTIVO");
+		await cashRegisterTerminalsRepository.createAssociation(newCashRegister.id, cashTerminal.id);
 
 		return newCashRegister;
 	} catch (error) {
-		throw error
+		throw error;
 	}
-}
+};
 
 const getAll = async () => {
 	try {

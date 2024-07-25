@@ -10,6 +10,7 @@ import TaskSet from './taskSet.model.js';
 import Sector from './sector.model.js';
 import UserSector from './userSector.model.js';
 import CashBox from './cashBox.model.js';
+import CashRegisterTerminals from './cashRegisterTerminals.model.js';
 
 // A.hasOne(B); // B HasOne A - Se lee de derecha a izquierda
 // A.belongsTo(B); // A BelongsTo B - Se lee de izquierda a derecha
@@ -55,9 +56,8 @@ Provider.hasMany(CashMovement, { foreignKey: 'providerId' });
 Cancellation.belongsTo(CashRegister, { foreignKey: 'cashRegisterId' });
 CashRegister.hasMany(Cancellation, { foreignKey: 'cashRegisterId' });
 
-// Terminal model
-Terminal.belongsTo(CashRegister, { foreignKey: 'cashRegisterId' });
-CashRegister.hasMany(Terminal, { foreignKey: 'cashRegisterId' });
+CashRegister.belongsToMany(Terminal, { through: CashRegisterTerminals, foreignKey: 'cashRegisterId' });
+Terminal.belongsToMany(CashRegister, { through: CashRegisterTerminals, foreignKey: 'terminalId' });
 
 // TaskSet model
 TaskSet.belongsTo(User, { foreignKey: 'userId' });
@@ -76,4 +76,5 @@ export {
 	Sector,
 	UserSector,
 	CashBox,
+	CashRegisterTerminals,
 }

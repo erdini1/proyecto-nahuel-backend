@@ -1,4 +1,4 @@
-import { CashBox, CashRegister, User } from '../models/index.model.js'
+import { CashBox, CashRegister, CashRegisterTerminals, Terminal, User } from '../models/index.model.js'
 
 const create = async (cashRegisterData) => {
 	const cashRegister = await CashRegister.create(cashRegisterData)
@@ -17,6 +17,11 @@ const getAll = async () => {
 				model: CashBox,
 				required: true,
 				attributes: ['id', 'description', 'hasCheckingAccount']
+			},
+			{
+				model: Terminal,
+				required: true,
+				attributes: ['id', 'terminalNumber', 'description']
 			}
 		],
 		attributes: {
@@ -65,14 +70,6 @@ const getLastByUserId = async (userId) => {
 	})
 	return cashRegister
 }
-
-// const getByUserId = async (userId) => {
-// 	const cashRegister = await CashRegister.findOne({
-// 		where: { userId },
-// 		order: [['id', 'DESC']]
-// 	});
-// 	return cashRegister
-// }
 
 const save = async (cashRegister) => {
 	await cashRegister.save()

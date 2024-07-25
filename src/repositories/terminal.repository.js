@@ -12,18 +12,9 @@ const bulkCreate = async (terminalsData) => {
 
 const getAll = async () => {
 	const terminals = await Terminal.findAll({
-		include: [
-			{
-				model: CashRegister,
-				required: true,
-				attributes: {
-					exclude: ['updatedAt', "createdAt"]
-				}
-			}
+		order: [
+			['description', 'ASC']
 		],
-		attributes: {
-			exclude: ['updatedAt', "createdAt", 'cashRegisterId']
-		}
 	})
 	return terminals
 }
@@ -46,10 +37,30 @@ const getById = async (terminalId) => {
 	return terminal
 }
 
+const getByDescription = async (description) => {
+	const terminal = await Terminal.findOne({
+		where: {
+			description
+		}
+	})
+	return terminal
+}
+
 const getByCashRegisterId = async (cashRegisterId) => {
 	const terminals = await Terminal.findAll({
-		where: {
-			cashRegisterId
+		include: [
+			{
+				model: CashRegister,
+				where: {
+					id: cashRegisterId
+				},
+				attributes: {
+					exclude: ['updatedAt', "createdAt"]
+				}
+			}
+		],
+		attributes: {
+			exclude: ['updatedAt', "createdAt", 'cashRegisterId']
 		}
 	})
 	return terminals
@@ -67,9 +78,10 @@ const save = async (terminal) => {
 export const terminalRepository = {
 	create,
 	bulkCreate,
-	save,
 	getAll,
 	getById,
+	getByDescription,
 	getByCashRegisterId,
-	deleteTerminal
+	deleteTerminal,
+	save,
 }

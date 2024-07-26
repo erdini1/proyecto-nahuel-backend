@@ -6,7 +6,9 @@ const create = async (cashBoxData) => {
 }
 
 const getAll = async () => {
-	const cashBoxs = await CashBox.findAll()
+	const cashBoxs = await CashBox.findAll({
+		order: [['description', 'ASC']]
+	})
 	return cashBoxs
 }
 

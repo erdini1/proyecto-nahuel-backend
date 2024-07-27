@@ -14,13 +14,9 @@ const User = sequelize.define("User",
 			allowNull: false,
 		},
 		number: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			unique: true,
-		},
-		password: {
 			type: DataTypes.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		role: {
 			type: DataTypes.STRING,
@@ -32,12 +28,7 @@ const User = sequelize.define("User",
 			allowNull: false,
 			defaultValue: true,
 		},
-	}, {
-	hooks: {
-		beforeCreate: async (user) => {
-			user.password = await hashPassword(user.password);
-		}
 	}
-})
+)
 
 export default User

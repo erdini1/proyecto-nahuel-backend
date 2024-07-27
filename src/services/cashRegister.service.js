@@ -68,6 +68,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 			cashToRenderWithMercadoPago,
 			cashToRenderWithPointMaxiconsumo,
 			cashBoxId,
+			batchNumber,
 			isClosed
 		} = cashRegisterData;
 
@@ -88,6 +89,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 		cashRegister.cashToRenderWithMercadoPago = cashToRenderWithMercadoPago || cashRegister.cashToRenderWithMercadoPago;
 		cashRegister.cashToRenderWithPointMaxiconsumo = cashToRenderWithPointMaxiconsumo || cashRegister.cashToRenderWithPointMaxiconsumo;
 		cashRegister.cashBoxId = cashBoxId || cashRegister.cashBoxId;
+		cashRegister.batchNumber = batchNumber || cashRegister.batchNumber;
 		cashRegister.isClosed = isClosed || cashRegister.isClosed
 
 		await cashRegisterRepository.save(cashRegister);

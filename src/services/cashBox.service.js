@@ -41,7 +41,7 @@ const update = async (cashBoxId, cashBoxData) => {
 		if (!cashBox) throw new ApiError("La caja no existe", HTTP_STATUSES.NOT_FOUND);
 
 		cashBox.description = description || cashBox.description;
-		cashBox.hasCheckingAccount = hasCheckingAccount || cashBox.hasCheckingAccount;
+		cashBox.hasCheckingAccount = hasCheckingAccount;
 
 		await cashBoxRepository.save(cashBox);
 		return cashBox;

@@ -2,10 +2,6 @@ import { DataTypes } from "sequelize";
 import sequelize from "../config/db.config.js";
 
 const CashRegister = sequelize.define("CashRegister", {
-	// cashRegisterNumber: {
-	// 	type: DataTypes.INTEGER,
-	// 	allowNull: false,
-	// },
 	date: {
 		type: DataTypes.DATEONLY,
 		allowNull: false,
@@ -61,6 +57,10 @@ const CashRegister = sequelize.define("CashRegister", {
 	},
 	cashToRenderWithPointMaxiconsumo: {
 		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
+	batchNumber: {
+		type: DataTypes.STRING,
 		allowNull: true,
 	},
 	isClosed: {

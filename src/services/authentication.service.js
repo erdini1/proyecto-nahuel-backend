@@ -13,7 +13,7 @@ import { userTaskRepository } from "../repositories/userTask.respository.js";
 // TODO: Limpiar y refactorizar 
 const create = async (userData) => {
 	try {
-		const { firstName, lastName, number, password, Sectors } = userData;
+		const { firstName, lastName, number, Sectors } = userData;
 
 		const user = await userRepository.findUserByNumber(number);
 		if (user) throw new ApiError("El numero de empleado ya se encuentra registrado", HTTP_STATUSES.BAD_REQUEST);
@@ -39,7 +39,6 @@ const create = async (userData) => {
 			firstName,
 			lastName,
 			number,
-			password,
 			role
 		});
 
@@ -71,7 +70,7 @@ const create = async (userData) => {
 // TODO: Hacer que cuando se modifique el sector de un usuario, se le asignen las tareas correspondientes y se eliminen las tareas que no correspondan
 const update = async (userId, userData) => {
 	try {
-		const { firstName, lastName, number, password, Sectors } = userData;
+		const { firstName, lastName, number, Sectors } = userData;
 
 		const user = await userRepository.getById(userId);
 		if (!user) throw new ApiError("El empleado no se encuentra registrado", 404);
@@ -80,7 +79,6 @@ const update = async (userId, userData) => {
 		user.lastName = lastName || user.lastName;
 		user.number = number || user.number;
 
-		if (password && password !== user.password) user.password = await hashPassword(password);
 		Sectors.find(sector => sector.name === 'caja') ? user.role = ROLE.CASHIER : user.role = ROLE.EMPLOYEE;
 
 		const currentSectors = await user.getSectors();
@@ -98,19 +96,15 @@ const update = async (userId, userData) => {
 
 const login = async (userData) => {
 	try {
-		const { number, password } = userData;
+		const { number } = userData;
 
 		const user = await userRepository.findUserByNumber(number);
 		if (!user) throw new ApiError("El empleado no se encuentra registrado", HTTP_STATUSES.NOT_FOUND)
-
-		// const isValidPassword = await comparePassword(password, user.password);
-		// if (!isValidPassword) throw new ApiError("La contraseña es incorrecta", HTTP_STATUSES.UNAUTHORIZED)
 
 		const token = encode({
 			id: user.id,
 			firstName: user.firstName,
 			lastName: user.lastName,
-			number: user.number,
 			role: user.role
 		});
 

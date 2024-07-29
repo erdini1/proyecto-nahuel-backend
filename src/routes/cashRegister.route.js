@@ -11,4 +11,6 @@ router.get("/check", isCashier, cashRegisterController.checkIfCashRegisterExists
 router.get("/:cashRegisterId", isAdmin, cashRegisterController.getById)
 router.put("/:cashRegisterId", isCashier, cashRegisterController.update)
 
+router.get("/export-csv/download", cashRegisterController.downloadCSV);
+
 export default router

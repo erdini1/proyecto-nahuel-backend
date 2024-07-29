@@ -23,7 +23,8 @@ const getAll = async () => {
 		],
 		attributes: {
 			exclude: ['updatedAt', 'cashRegisterId', 'providerId']
-		}
+		},
+		order: [["id", "DESC"]]
 	})
 	return cashMovements
 }

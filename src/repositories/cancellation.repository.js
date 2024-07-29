@@ -18,7 +18,8 @@ const getAll = async () => {
 		],
 		attributes: {
 			exclude: ['updatedAt', "createdAt", 'cashRegisterId']
-		}
+		},
+		order: [["id", "DESC"]]
 	})
 	return cancellations
 }

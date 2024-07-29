@@ -1,4 +1,5 @@
 import { HTTP_STATUSES } from '../constants/http.constant.js';
+import ApiError from '../errors/api.error.js';
 import { cashRegisterService } from '../services/cashRegister.service.js';
 
 const create = async (req, res, next) => {
@@ -55,6 +56,19 @@ const getLastByUserId = async (req, res, next) => {
 	}
 }
 
+const downloadCSV = async (req, res, next) => {
+	try {
+		const filename = await cashRegisterService.exportToCSV();
+		res.download(`src/exports/${filename}`, (err) => {
+			if (err) {
+				throw new ApiError("File has expired", 500);
+			}
+		});
+	} catch (error) {
+		next(error);
+	}
+};
+
 export const cashRegisterController = {
 	create,
 	getAll,
@@ -62,4 +76,5 @@ export const cashRegisterController = {
 	update,
 	checkIfCashRegisterExists,
 	getLastByUserId,
+	downloadCSV,
 }

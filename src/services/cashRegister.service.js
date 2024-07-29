@@ -4,6 +4,7 @@ import { cashRegisterRepository } from "../repositories/cashRegister.repository.
 import { cashRegisterTerminalsRepository } from "../repositories/cashRegisterTerminals.repository.js";
 import { terminalRepository } from "../repositories/terminal.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
+import generateCSV from "../utils/csv.util.js";
 
 const create = async (userId, cashRegisterData) => {
 	try {
@@ -120,11 +121,18 @@ const getLastByUserId = async (userId) => {
 	}
 }
 
+const exportToCSV = async () => {
+	const data = await cashRegisterRepository.getAll();
+	const fileName = await generateCSV(data);
+	return fileName;
+};
+
 export const cashRegisterService = {
 	create,
 	getAll,
 	getById,
 	update,
 	checkIfCashRegisterExists,
-	getLastByUserId
+	getLastByUserId,
+	exportToCSV
 };

@@ -1,5 +1,5 @@
 import { Op, where } from 'sequelize'
-import { Task, User, UserTask, TaskSet } from '../models/index.model.js'
+import { Task, User, UserTask, TaskSet, Sector } from '../models/index.model.js'
 
 // REVISADO
 const createMany = async (userTasksData) => {
@@ -24,6 +24,15 @@ const getLatestByUserIdAndTaskId = async (userId, taskId, taskSetId) => {
 const getById = async (userTaskId) => {
 	const userTask = await UserTask.findByPk(userTaskId)
 	return userTask
+}
+
+const getByIds = async (userTaskIds) => {
+	const userTasks = await UserTask.findAll({
+		where: {
+			id: userTaskIds
+		}
+	})
+	return userTasks
 }
 
 // NO REVISADO
@@ -54,6 +63,9 @@ const getByUserIdAndTaskSet = async (userId, taskSetId) => {
 				model: Task,
 				required: true,
 				attributes: ['id', 'description', "type"],
+				include: {
+					model: Sector
+				}
 			},
 			{
 				model: User,
@@ -207,10 +219,25 @@ const save = async (userTask) => {
 	await userTask.save()
 }
 
+const updateMany = async (userTasks) => {
+	try {
+		const promises = userTasks.map(async (userTask) => {
+			return await UserTask.update(
+				{ isActive: userTask.isActive },
+				{ where: { id: userTask.id } }
+			);
+		});
+		await Promise.all(promises);
+	} catch (error) {
+		throw new Error("Error al actualizar múltiples registros: " + error.message);
+	}
+};
+
 export const userTaskRepository = {
 	createMany,
 	getLatestByUserIdAndTaskId,
 	getById,
+	getByIds,
 	getAll,
 	getByUserId,
 	getByUserIdAndTaskSet,
@@ -220,4 +247,5 @@ export const userTaskRepository = {
 	getByTaskSetId,
 	getByTaskId,
 	save,
+	updateMany,
 }

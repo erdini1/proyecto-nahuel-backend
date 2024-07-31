@@ -104,6 +104,7 @@ const getByDate = async (date) => {
 	}
 }
 
+// REVISADO
 const getAllByTaskSetNotClosed = async () => {
 	try {
 		const taskSets = await taskSetRepository.getAllTaskSetsNotClosed()
@@ -168,6 +169,17 @@ const deleteUserTask = async (userTaskId) => {
 	}
 }
 
+const removeMany = async (userTaskIds) => {
+	try {
+		const userTasks = await userTaskRepository.getByIds(userTaskIds);
+		userTasks.forEach(userTask => {
+			userTask.isActive = false;
+		});
+		await userTaskRepository.updateMany(userTasks);
+	} catch (error) {
+		throw error;
+	}
+};
 
 export const userTaskService = {
 	create,
@@ -182,6 +194,7 @@ export const userTaskService = {
 	getByTaskSetId,
 	getByTaskId,
 	deleteUserTask,
+	removeMany
 }
 
 

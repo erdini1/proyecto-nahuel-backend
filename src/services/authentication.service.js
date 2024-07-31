@@ -9,6 +9,7 @@ import { taskSetRepository } from "../repositories/taskSet.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 import { userSectorRepository } from "../repositories/userSector.repository.js";
 import { userTaskRepository } from "../repositories/userTask.respository.js";
+import { userTaskService } from "./userTask.service.js";
 
 // TODO: Limpiar y refactorizar 
 const create = async (userData) => {
@@ -67,7 +68,6 @@ const create = async (userData) => {
 	}
 };
 
-// TODO: Hacer que cuando se modifique el sector de un usuario, se le asignen las tareas correspondientes y se eliminen las tareas que no correspondan
 const update = async (userId, userData) => {
 	try {
 		const { firstName, lastName, number, Sectors } = userData;
@@ -84,8 +84,43 @@ const update = async (userId, userData) => {
 		const currentSectors = await user.getSectors();
 		const newSectors = await sectorRepository.getAllBySectorIds(Sectors.map(sector => sector.id));
 
-		await user.removeSectors(currentSectors);
-		await user.addSectors(newSectors);
+		// Verificar si los sectores han cambiado
+		const currentSectorIds = currentSectors.map(sector => sector.id).sort();
+		const newSectorIds = newSectors.map(sector => sector.id).sort();
+		const sectorsChanged = JSON.stringify(currentSectorIds) !== JSON.stringify(newSectorIds);
+
+		// Si los sectores han cambiado, se actualizan las tareas
+		if (sectorsChanged) {
+			let taskSet = await taskSetRepository.getLastestById(userId);
+			if (!taskSet || taskSet.isClosed) {
+				taskSet = await taskSetRepository.create({ userId, shift: "" });
+			}
+
+			const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id);
+			const tasks = await taskRepository.getAll();
+
+			// Poner como inactivas las tareas que no correspondan a los nuevos sectores
+			const tasksToRemove = userTasks.filter(userTask =>
+				!newSectors.some(sector => sector.id === userTask.Task.Sector.id) &&
+				userTask.Task.Sector.name !== 'general'
+			);
+			await userTaskService.removeMany(tasksToRemove.map(userTask => userTask.id));
+
+			// Filtrar sectores nuevos
+			const sectorIdsToAdd = newSectors.map(sector => sector.id).filter(sectorId => !currentSectorIds.includes(sectorId));
+
+			const tasksToAdd = tasks.filter(task => sectorIdsToAdd.includes(task.Sector.id));
+			const checklistItems = tasksToAdd.map(task => ({
+				taskId: task.id,
+				isCompleted: false,
+				userId: user.id,
+				taskSetId: taskSet.id
+			}));
+			await userTaskRepository.createMany(checklistItems);
+
+			await user.removeSectors(currentSectors);
+			await user.addSectors(newSectors);
+		}
 
 		await userRepository.save(user);
 		return user;

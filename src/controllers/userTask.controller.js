@@ -101,10 +101,10 @@ const getByTaskId = async (req, res, next) => {
 }
 
 // REVISADO
-const deleteUserTask = async (req, res, next) => {
+const disableUserTask = async (req, res, next) => {
 	try {
-		await userTaskService.deleteUserTask(req.params.userTaskId);
-		res.status(HTTP_STATUSES.NO_CONTENT).send();
+		const userTask = await userTaskService.disableUserTask(req.params.userTaskId, req.body.isActive);
+		res.status(HTTP_STATUSES.OK).json(userTask);
 	} catch (error) {
 		next(error)
 	}
@@ -121,5 +121,5 @@ export const userTaskController = {
 	getByRangeOfDates,
 	getByTaskSetId,
 	getByTaskId,
-	deleteUserTask,
+	disableUserTask,
 }

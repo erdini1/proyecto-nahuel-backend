@@ -13,6 +13,6 @@ router.get("/task-set/:taskSetId", isAuthenticated, userTaskController.getByTask
 router.get("/user/:userId", isAdmin, userTaskController.getByUserId) // NO REVISADO
 router.get("/task/:taskId", isAdmin, userTaskController.getByTaskId) // NO REVISADO - NO SE USA
 router.put("/:taskId/completed", isAuthenticated, userTaskController.markTaskAsCompleted) // REVISADO
-router.delete("/:userTaskId", isAdmin, userTaskController.deleteUserTask) // REVISADO
+router.put("/:userTaskId", isAdmin, userTaskController.disableUserTask) // REVISADO
 
 export default router

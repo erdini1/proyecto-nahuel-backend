@@ -157,12 +157,12 @@ const getByTaskId = async (taskId) => {
 }
 
 // REVISADO
-const deleteUserTask = async (userTaskId) => {
+const disableUserTask = async (userTaskId, isActive) => {
 	try {
 		const userTask = await userTaskRepository.getById(userTaskId)
 		if (!userTask) throw new ApiError("La user task no existe", HTTP_STATUSES.NOT_FOUND)
 
-		userTask.isActive = false
+		userTask.isActive = isActive || false
 		await userTaskRepository.save(userTask)
 	} catch (error) {
 		throw error
@@ -193,7 +193,7 @@ export const userTaskService = {
 	getByRangeOfDates,
 	getByTaskSetId,
 	getByTaskId,
-	deleteUserTask,
+	disableUserTask,
 	removeMany
 }
 

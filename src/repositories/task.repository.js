@@ -33,7 +33,7 @@ const getByDescription = async (description) => {
 			description
 		}
 	})
-	return task
+	return task || null
 }
 
 const save = async (task) => {

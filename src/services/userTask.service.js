@@ -29,6 +29,38 @@ const create = async (userTaskData) => {
 	}
 }
 
+const createForManyUsers = async (userTaskData) => {
+	try {
+		const userIds = userTaskData.map(item => item.userId);
+
+		const newUserTasksPromises = userIds.map(async userId => {
+			let taskSet = await taskSetRepository.getLastestById(userId);
+
+			if (!taskSet || taskSet.isClosed) {
+				taskSet = await taskSetRepository.create({ userId, shift: "" });
+			}
+
+			return userTaskData
+				.filter(item => item.userId === userId)
+				.map(item => ({
+					taskId: item.taskId,
+					isCompleted: false,
+					userId: item.userId,
+					periodicity: "recurring",
+					taskSetId: taskSet.id
+				}));
+		});
+
+		const newUserTasks = await Promise.all(newUserTasksPromises);
+
+		const flattenedNewUserTasks = newUserTasks.flat();
+
+		return await userTaskRepository.createMany(flattenedNewUserTasks);
+	} catch (error) {
+		throw error;
+	}
+};
+
 // REVISADO
 const markTaskAsCompleted = async (userId, taskId, body) => {
 	try {
@@ -183,6 +215,7 @@ const removeMany = async (userTaskIds) => {
 
 export const userTaskService = {
 	create,
+	createForManyUsers,
 	markTaskAsCompleted,
 	getAll,
 	getByUserId,

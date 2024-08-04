@@ -1,20 +1,34 @@
 import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { taskRepository } from "../repositories/task.repository.js";
+import { userRepository } from "../repositories/user.repository.js";
+import { userTaskService } from "./userTask.service.js";
 
-// TODO: Hacer que cuando se crea una nueva tarea, se asigne a todos los usuarios con ese sector
 const create = async (taskData) => {
 	try {
 		const { description, sector, type } = taskData;
 
 		const task = await taskRepository.getByDescription(description);
-		if (task) throw new ApiError("La tarea ya se encuentra registrada", HTTP_STATUSES.BAD_REQUEST)
-
-		return await taskRepository.create({
+		if (task !== null) throw new ApiError("La tarea ya se encuentra registrada", HTTP_STATUSES.BAD_REQUEST)
+		const newTask = await taskRepository.create({
 			description,
 			sectorId: sector,
 			type,
 		});
+
+		const users = await userRepository.getAll();
+		const usersWithSector = users.filter(user => user.Sectors.find(userSector => userSector.id === sector));
+
+		const userTasks = usersWithSector.map(user => {
+			return {
+				userId: user.id,
+				taskId: newTask.id,
+				isCompleted: false,
+			};
+		})
+		await userTaskService.createForManyUsers(userTasks);
+
+		return newTask;
 	} catch (error) {
 		throw error
 	}
@@ -30,7 +44,7 @@ const getAll = async () => {
 
 const update = async (taskId, taskData) => {
 	try {
-		const { description, sector, type, kilos, quantity } = taskData;
+		const { description, sector, type } = taskData;
 
 		const task = await taskRepository.getById(taskId);
 		if (!task) throw new ApiError("La tarea no existe", HTTP_STATUSES.NOT_FOUND);

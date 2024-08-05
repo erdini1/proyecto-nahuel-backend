@@ -1,6 +1,7 @@
 import express from "express"
 // import csrf from "csurf"
 // import cookieParser from "cookie-parser"
+import cors from "cors"
 import { BACKEND } from "./src/config/env-defaults.config.js"
 import sequelize from "./src/config/db.config.js"
 import indexRouter from "./src/routes/index.route.js"
@@ -18,6 +19,9 @@ const app = express()
 // // Habilitar CSRF (CROSS-SITE REQUEST FORGERY )
 // app.use(csrf({ cookie: true }))
 
+// TODO: Poner una cronjob que agregue automaticamente las mismas tareas todos los dias
+
+app.use(cors())
 app.use(express.json())
 
 try {

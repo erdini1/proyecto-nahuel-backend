@@ -19,8 +19,6 @@ const app = express()
 // // Habilitar CSRF (CROSS-SITE REQUEST FORGERY )
 // app.use(csrf({ cookie: true }))
 
-// TODO: Poner una cronjob que agregue automaticamente las mismas tareas todos los dias
-
 app.use(cors())
 app.use(express.json())
 

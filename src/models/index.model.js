@@ -5,7 +5,7 @@ import CashRegister from './cashRegister.model.js';
 import CashMovement from './cashMovement.model.js';
 import Cancellation from './cancellation.model.js';
 import Provider from './provider.model.js';
-import Terminal from './Terminal.model.js';
+import Terminal from './terminal.model.js';
 import TaskSet from './taskSet.model.js';
 import Sector from './sector.model.js';
 import UserSector from './userSector.model.js';

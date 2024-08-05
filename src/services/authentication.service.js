@@ -14,7 +14,7 @@ import { userTaskService } from "./userTask.service.js";
 // TODO: Limpiar y refactorizar 
 const create = async (userData) => {
 	try {
-		const { firstName, lastName, number, Sectors } = userData;
+		const { firstName, lastName, number, role, Sectors } = userData;
 
 		const user = await userRepository.findUserByNumber(number);
 		if (user) throw new ApiError("El numero de empleado ya se encuentra registrado", HTTP_STATUSES.BAD_REQUEST);
@@ -27,20 +27,20 @@ const create = async (userData) => {
 		}
 
 		let sectorTasks = [];
-		let role = ROLE.EMPLOYEE;
+		let newRole = ROLE.EMPLOYEE;
 		if (Sectors && Sectors.length > 0) {
 			for (const sector of Sectors) {
 				const sectorSpecificTasks = tasks.filter(task => task.Sector.name === sector.name);
 				sectorTasks = sectorTasks.concat(sectorSpecificTasks);
 			}
-			role = Sectors.find(sector => sector.name == 'caja') ? ROLE.CASHIER : ROLE.EMPLOYEE;
+			newRole = Sectors.find(sector => sector.name == 'caja') ? ROLE.CASHIER : ROLE.EMPLOYEE;
 		}
 
 		const newUser = await userRepository.create({
 			firstName,
 			lastName,
 			number,
-			role
+			role: role === ROLE.ADMIN ? ROLE.ADMIN : newRole,
 		});
 
 		if (Sectors && Sectors.length > 0) {

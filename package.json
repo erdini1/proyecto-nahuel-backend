@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
     "dev": "nodemon app.js",
     "db:import": "node src/seed/index.seed.js -i",
     "db:delete": "node src/seed/index.seed.js -d"

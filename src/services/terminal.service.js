@@ -1,19 +1,14 @@
 import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { terminalRepository } from "../repositories/terminal.repository.js";
-import { cashRegisterRepository } from "../repositories/cashRegister.repository.js"
 
-// TODO: Limpiar todo este codigo
 const create = async (terminalData) => {
 	try {
-		const { terminalNumber, description/* , cashRegisterId */ } = terminalData
-		// const cashRegister = await cashRegisterRepository.getById(cashRegisterId)
-		// if (!cashRegister) throw new ApiError("El registro de caja no existe", HTTP_STATUSES.NOT_FOUND)
+		const { terminalNumber, description } = terminalData
 
 		return await terminalRepository.create({
 			terminalNumber,
 			description,
-			// cashRegisterId
 		})
 	} catch (error) {
 		throw error
@@ -22,12 +17,6 @@ const create = async (terminalData) => {
 
 const bulkCreate = async (terminalsData) => {
 	try {
-		// for (const terminalData of terminalsData) {
-		// 	const { cashRegisterId } = terminalData;
-		// 	const cashRegister = await cashRegisterRepository.getById(cashRegisterId);
-		// 	if (!cashRegister) throw new ApiError("El registro de caja no existe", HTTP_STATUSES.NOT_FOUND);
-		// }
-
 		return await terminalRepository.bulkCreate(terminalsData);
 	} catch (error) {
 		throw error;

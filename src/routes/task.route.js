@@ -5,6 +5,7 @@ import { taskController } from "../controllers/task.controller.js"
 const router = express.Router()
 
 router.get("/", isAdmin, taskController.getAll)
+router.post("/bulk", isAdmin, taskController.bulkCreate)
 router.post("/", isAdmin, taskController.create)
 router.get("/:id", isAdmin, taskController.getById)
 router.put("/:id", isAdmin, taskController.update)

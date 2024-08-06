@@ -5,6 +5,7 @@ import { providerController } from "../controllers/provider.controller.js"
 const router = express.Router()
 
 router.post("/", isAdmin, providerController.create)
+router.post("/bulk", isAdmin, providerController.bulkCreate)
 router.get("/", isCashier, providerController.getAll)
 router.get("/:providerId", isAdmin, providerController.getById)
 router.put("/:providerId", isAdmin, providerController.update)

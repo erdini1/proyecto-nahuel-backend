@@ -34,6 +34,14 @@ const create = async (taskData) => {
 	}
 };
 
+const bulkCreate = async (tasksData) => {
+	try {
+		return await taskRepository.bulkCreate(tasksData);
+	} catch (error) {
+		throw error;
+	}
+}
+
 const getAll = async () => {
 	try {
 		return await taskRepository.getAll();
@@ -84,6 +92,7 @@ const deleteTask = async (taskId) => {
 
 export const taskService = {
 	create,
+	bulkCreate,
 	getAll,
 	update,
 	getById,

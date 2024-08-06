@@ -5,6 +5,11 @@ const create = async (providerData) => {
 	return provider?.dataValues
 }
 
+const bulkCreate = async (providersData) => {
+	const providers = await Provider.bulkCreate(providersData)
+	return providers
+}
+
 const getAll = async () => {
 	const providers = await Provider.findAll({
 		order: [['name', 'ASC']]
@@ -23,6 +28,7 @@ const save = async (provider) => {
 
 export const providerRepository = {
 	create,
+	bulkCreate,
 	save,
 	getAll,
 	getById,

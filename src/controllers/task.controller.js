@@ -10,6 +10,15 @@ const create = async (req, res, next) => {
 	}
 }
 
+const bulkCreate = async (req, res, next) => {
+	try {
+		const tasks = await taskService.bulkCreate(req.body);
+		res.status(HTTP_STATUSES.CREATED).json(tasks);
+	} catch (error) {
+		next(error)
+	}
+}
+
 const getAll = async (req, res, next) => {
 	try {
 		const tasks = await taskService.getAll();
@@ -47,6 +56,7 @@ const deleteTask = async (req, res, next) => {
 
 export const taskController = {
 	create,
+	bulkCreate,
 	getAll,
 	update,
 	getById,

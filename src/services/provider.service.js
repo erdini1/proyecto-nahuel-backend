@@ -12,6 +12,14 @@ const create = async (providerData) => {
 	}
 }
 
+const bulkCreate = async (providersData) => {
+	try {
+		return await providerRepository.bulkCreate(providersData);
+	} catch (error) {
+		throw error;
+	}
+}
+
 const getAll = async () => {
 	try {
 		return await providerRepository.getAll();
@@ -62,6 +70,7 @@ const deleteById = async (providerId) => {
 
 export const providerService = {
 	create,
+	bulkCreate,
 	getAll,
 	getById,
 	update,

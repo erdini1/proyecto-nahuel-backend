@@ -126,6 +126,16 @@ const getByUserIdAndTaskSet = async (userId) => {
 	}
 }
 
+const getUserTaskByUserIdAndTaskId = async (userId, taskId) => {
+	try {
+		const taskSet = await taskSetRepository.getLastestById(userId);
+		const userTask = await userTaskRepository.getLatestByUserIdAndTaskId(userId, taskId, taskSet.id);
+		return userTask;
+	} catch (error) {
+		throw error;
+	}
+}
+
 // NO REVISADO
 const getByDate = async (date) => {
 	try {
@@ -201,7 +211,7 @@ const disableUserTask = async (userTaskId, isActive) => {
 	}
 }
 
-const removeMany = async (userTaskIds) => {
+const removeManyByUserTaskId = async (userTaskIds) => {
 	try {
 		const userTasks = await userTaskRepository.getByIds(userTaskIds);
 		userTasks.forEach(userTask => {
@@ -219,6 +229,7 @@ export const userTaskService = {
 	markTaskAsCompleted,
 	getAll,
 	getByUserId,
+	getUserTaskByUserIdAndTaskId,
 	getByUserIdAndTaskSet,
 	getByDate,
 	getAllByTaskSetNotClosed,
@@ -227,7 +238,7 @@ export const userTaskService = {
 	getByTaskSetId,
 	getByTaskId,
 	disableUserTask,
-	removeMany
+	removeManyByUserTaskId
 }
 
 

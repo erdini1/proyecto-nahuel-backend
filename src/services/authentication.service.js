@@ -96,15 +96,20 @@ const update = async (userId, userData) => {
 				taskSet = await taskSetRepository.create({ userId, shift: "" });
 			}
 
-			const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id);
-			const tasks = await taskRepository.getAll();
+			const [
+				userTasks,
+				tasks
+			] = await Promise.all([
+				userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id),
+				taskRepository.getAll()
+			]);
 
 			// Poner como inactivas las tareas que no correspondan a los nuevos sectores
 			const tasksToRemove = userTasks.filter(userTask =>
 				!newSectors.some(sector => sector.id === userTask.Task.Sector.id) &&
 				userTask.Task.Sector.name !== 'general'
 			);
-			await userTaskService.removeMany(tasksToRemove.map(userTask => userTask.id));
+			await userTaskService.removeManyByUserTaskId(tasksToRemove.map(userTask => userTask.id));
 
 			// Filtrar sectores nuevos
 			const sectorIdsToAdd = newSectors.map(sector => sector.id).filter(sectorId => !currentSectorIds.includes(sectorId));

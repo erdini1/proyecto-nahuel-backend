@@ -1,6 +1,7 @@
 import { HTTP_STATUSES } from "../constants/http.constant.js";
 import ApiError from "../errors/api.error.js";
 import { taskRepository } from "../repositories/task.repository.js";
+import { taskSetRepository } from "../repositories/taskSet.repository.js";
 import { userRepository } from "../repositories/user.repository.js";
 import { userTaskService } from "./userTask.service.js";
 
@@ -58,8 +59,29 @@ const update = async (taskId, taskData) => {
 		if (!task) throw new ApiError("La tarea no existe", HTTP_STATUSES.NOT_FOUND);
 
 		task.description = description || task.description;
-		task.sectorId = sector || task.sectorId;
 		task.type = type || task.type;
+
+		if (sector && sector !== task.sectorId) {
+			const users = await userRepository.getAll();
+			const usersWithSector = users.filter(user => user.Sectors.find(userSector => userSector.id === sector));
+			const usersWithPreviousSector = users.filter(user => user.Sectors.find(userSector => userSector.id === task.sectorId));
+
+			const userTasksToDelete = await Promise.all(usersWithPreviousSector.map(async user => {
+				return userTaskService.getUserTaskByUserIdAndTaskId(user.id, task.id);
+			}));
+			await userTaskService.removeManyByUserTaskId(userTasksToDelete.map(userTask => !userTask ? null : userTask.id));
+
+			const userTasks = usersWithSector.map(user => {
+				return {
+					userId: user.id,
+					taskId: task.id,
+					isCompleted: false,
+				};
+			})
+			await userTaskService.createForManyUsers(userTasks);
+
+		}
+		task.sectorId = sector || task.sectorId;
 
 		await taskRepository.save(task);
 		return task;

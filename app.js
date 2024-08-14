@@ -32,6 +32,7 @@ try {
 
 app.use("/api", indexRouter)
 
+
 // Middlewares de Errores
 app.use((req, res, next) => {
 	error(JSON.stringify({

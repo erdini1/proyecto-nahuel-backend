@@ -30,6 +30,11 @@ const UserTask = sequelize.define("UserTask", {
 		allowNull: false,
 		defaultValue: DataTypes.NOW,
 	},
+	order: {
+		type: DataTypes.INTEGER,
+		allowNull: false,
+		defaultValue: 0,
+	},
 })
 
 export default UserTask

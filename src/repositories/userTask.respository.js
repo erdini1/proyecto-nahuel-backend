@@ -84,7 +84,7 @@ const getByUserIdAndTaskSet = async (userId, taskSetId) => {
 		attributes: {
 			exclude: ['updatedAt', 'taskId', 'userId']
 		},
-		order: [['createdAt', 'ASC']]
+		order: [['order', 'ASC']]
 	})
 	return userTasks
 }
@@ -219,6 +219,22 @@ const save = async (userTask) => {
 	await userTask.save()
 }
 
+const updateTaskOrder = async (userTasksToUpdate, taskIdToOrderMap) => {
+	try {
+		const promises = userTasksToUpdate.map(async (userTask) => {
+			return await UserTask.update(
+				{ order: taskIdToOrderMap[userTask.id] },
+				{ where: { id: userTask.id } }
+			);
+		});
+
+		await Promise.all(promises);
+
+	} catch (error) {
+		throw new Error("Error al actualizar múltiples registros: " + error.message);
+	}
+};
+
 const updateMany = async (userTasks) => {
 	try {
 		const promises = userTasks.map(async (userTask) => {
@@ -247,5 +263,6 @@ export const userTaskRepository = {
 	getByTaskSetId,
 	getByTaskId,
 	save,
+	updateTaskOrder,
 	updateMany,
 }

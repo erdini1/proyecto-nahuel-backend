@@ -114,12 +114,10 @@ const getByUserId = async (userId) => {
 const getByUserIdAndTaskSet = async (userId) => {
 	try {
 		const taskSet = await taskSetRepository.getLastestById(userId)
-		// if (!taskSet) throw new ApiError("No se encontro un conjuto de tareas", HTTP_STATUSES.NOT_FOUND)
 		let userTasks
 		if (taskSet) {
 			userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id)
 		}
-		// const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id)
 		return userTasks || []
 	} catch (error) {
 		throw error
@@ -211,6 +209,29 @@ const disableUserTask = async (userTaskId, isActive) => {
 	}
 }
 
+const updateTaskOrder = async (taskIdsInOrder, userId) => {
+	try {
+		const taskSet = await taskSetRepository.getLastestById(userId);
+		const currentUserTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id);
+
+		const taskIdToOrderMap = taskIdsInOrder.reduce((map, id, index) => {
+			map[id] = index;
+			return map;
+		}, {});
+
+		const userTasksToUpdate = currentUserTasks.filter(userTask => {
+			return userTask.order !== taskIdToOrderMap[userTask.id];
+		});
+
+		if (userTasksToUpdate.length > 0) {
+			await userTaskRepository.updateTaskOrder(userTasksToUpdate, taskIdToOrderMap);
+		}
+
+	} catch (error) {
+		throw error;
+	}
+};
+
 const removeManyByUserTaskId = async (userTaskIds) => {
 	try {
 		const userTasks = await userTaskRepository.getByIds(userTaskIds);
@@ -238,6 +259,7 @@ export const userTaskService = {
 	getByTaskSetId,
 	getByTaskId,
 	disableUserTask,
+	updateTaskOrder,
 	removeManyByUserTaskId
 }
 

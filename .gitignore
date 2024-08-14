@@ -3,5 +3,4 @@ node_modules
 logs.log
 user.seed.js
 config
-migrations
 exports

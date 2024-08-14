@@ -110,6 +110,15 @@ const disableUserTask = async (req, res, next) => {
 	}
 }
 
+const updateTaskOrder = async (req, res, next) => {
+	try {
+		const userTask = await userTaskService.updateTaskOrder(req.body, req.params.userId);
+		res.status(HTTP_STATUSES.OK).json(userTask);
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const userTaskController = {
 	create,
 	markTaskAsCompleted,
@@ -122,4 +131,5 @@ export const userTaskController = {
 	getByTaskSetId,
 	getByTaskId,
 	disableUserTask,
+	updateTaskOrder
 }

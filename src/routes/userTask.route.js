@@ -14,5 +14,6 @@ router.get("/user/:userId", isAdmin, userTaskController.getByUserId) // NO REVIS
 router.get("/task/:taskId", isAdmin, userTaskController.getByTaskId) // NO REVISADO - NO SE USA
 router.put("/:taskId/completed", isAuthenticated, userTaskController.markTaskAsCompleted) // REVISADO
 router.put("/:userTaskId", isAdmin, userTaskController.disableUserTask) // REVISADO
+router.post("/order/:userId", isAuthenticated, userTaskController.updateTaskOrder) // REVISADO
 
 export default router

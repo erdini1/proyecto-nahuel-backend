@@ -5,6 +5,11 @@ const create = async (taskData) => {
 	return task?.dataValues
 }
 
+const bulkCreate = async (tasksData) => {
+	const tasks = await Task.bulkCreate(tasksData)
+	return tasks
+}
+
 const getAll = async () => {
 	const tasks = await Task.findAll({
 		include: [
@@ -50,6 +55,7 @@ const deleteTask = async (taskId) => {
 
 export const taskRepository = {
 	create,
+	bulkCreate,
 	save,
 	getAll,
 	getById,

@@ -21,6 +21,24 @@ const markTaskAsCompleted = async (req, res, next) => {
 	}
 }
 
+const markTaskAsOptional = async (req, res, next) => {
+	try {
+		const userTask = await userTaskService.markTaskAsOptional(req.params.userTaskId, req.body);
+		res.status(HTTP_STATUSES.OK).json(userTask);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const markTaskAsShouldDo = async (req, res, next) => {
+	try {
+		const userTask = await userTaskService.markTaskAsShouldDo(req.params.userTaskId, req.body);
+		res.status(HTTP_STATUSES.OK).json(userTask);
+	} catch (error) {
+		next(error)
+	}
+}
+
 // NO REVISADO
 const getAll = async (req, res, next) => {
 	try {
@@ -122,6 +140,8 @@ const updateTaskOrder = async (req, res, next) => {
 export const userTaskController = {
 	create,
 	markTaskAsCompleted,
+	markTaskAsOptional,
+	markTaskAsShouldDo,
 	getAll,
 	getByUserId,
 	getByUserIdAndTaskSet,

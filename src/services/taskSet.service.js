@@ -43,7 +43,8 @@ const update = async (userId, taskSetData) => {
 				taskId: userTask.Task.id,
 				isCompleted: false,
 				userId,
-				taskSetId: newTaskSet.id
+				taskSetId: newTaskSet.id,
+				isOptional: userTask.isOptional,
 			}))
 			await userTaskRepository.createMany(checklistItems)
 		}

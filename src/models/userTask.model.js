@@ -35,6 +35,16 @@ const UserTask = sequelize.define("UserTask", {
 		allowNull: false,
 		defaultValue: 0,
 	},
+	isOptional: {
+		type: DataTypes.BOOLEAN,
+		allowNull: false,
+		defaultValue: false,
+	},
+	shouldDo: {
+		type: DataTypes.BOOLEAN,
+		allowNull: true,
+		defaultValue: true,
+	},
 })
 
 export default UserTask

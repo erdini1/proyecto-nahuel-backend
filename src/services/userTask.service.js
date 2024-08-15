@@ -80,6 +80,42 @@ const markTaskAsCompleted = async (userId, taskId, body) => {
 	}
 }
 
+// función para modificar el campo isOptional
+const markTaskAsOptional = async (userTaskId, body) => {
+	try {
+		const { isOptional } = body;
+
+		const userTask = await userTaskRepository.getById(userTaskId);
+		if (!userTask) throw new ApiError("La tarea no existe", HTTP_STATUSES.NOT_FOUND);
+
+		userTask.isOptional = isOptional;
+
+		await userTaskRepository.save(userTask);
+		return userTask;
+	} catch (error) {
+		throw error;
+	}
+}
+
+// función para modificar el campo shouldDo
+const markTaskAsShouldDo = async (userTaskId, body) => {
+	try {
+		const { shouldDo } = body;
+
+		const userTask = await userTaskRepository.getById(userTaskId);
+		if (!userTask) throw new ApiError("La tarea no existe", HTTP_STATUSES.NOT_FOUND);
+
+		if (!userTask.isOptional) throw new ApiError("La tarea debe hacerse", HTTP_STATUSES.BAD_REQUEST);
+
+		userTask.shouldDo = shouldDo;
+
+		await userTaskRepository.save(userTask);
+		return userTask;
+	} catch (error) {
+		throw error;
+	}
+}
+
 // NO REVISADO
 const getAll = async () => {
 	try {
@@ -248,6 +284,8 @@ export const userTaskService = {
 	create,
 	createForManyUsers,
 	markTaskAsCompleted,
+	markTaskAsOptional,
+	markTaskAsShouldDo,
 	getAll,
 	getByUserId,
 	getUserTaskByUserIdAndTaskId,

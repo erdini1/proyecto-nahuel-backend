@@ -22,6 +22,7 @@ const create = async (userId, cashRegisterData) => {
 			changeAmount,
 			userId,
 			cashBoxId,
+			date: new Date()
 		});
 
 		const cashTerminal = await terminalRepository.getByDescription("EFECTIVO");
@@ -91,7 +92,11 @@ const update = async (cashRegisterId, cashRegisterData) => {
 		cashRegister.cashToRenderWithPointMaxiconsumo = cashToRenderWithPointMaxiconsumo || cashRegister.cashToRenderWithPointMaxiconsumo;
 		cashRegister.cashBoxId = cashBoxId || cashRegister.cashBoxId;
 		cashRegister.batchNumber = batchNumber || cashRegister.batchNumber;
-		cashRegister.isClosed = isClosed || cashRegister.isClosed
+		if (isClosed) {
+			cashRegister.isClosed = isClosed
+		}
+
+		console.log(cashRegister);
 
 		await cashRegisterRepository.save(cashRegister);
 		return cashRegister;

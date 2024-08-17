@@ -183,8 +183,7 @@ const getByDate = async (date) => {
 // REVISADO
 const getAllByTaskSetNotClosed = async () => {
 	try {
-		const taskSets = await taskSetRepository.getAllTaskSetsNotClosed()
-		const userTasks = await userTaskRepository.getAllByTaskSetNotClosed(taskSets.map(taskSet => taskSet.id))
+		const userTasks = await userTaskRepository.getAllByTaskSetNotClosed()
 		return userTasks
 	} catch (error) {
 		throw error

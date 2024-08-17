@@ -14,10 +14,8 @@ const create = async (userId, cashRegisterData) => {
 			cashBoxId,
 		} = cashRegisterData;
 
-		console.log("userId", userId);
 		const user = await userRepository.getById(userId);
 		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND);
-
 
 		const newCashRegister = await cashRegisterRepository.create({
 			initialAmount,
@@ -27,20 +25,9 @@ const create = async (userId, cashRegisterData) => {
 			date: new Date()
 		});
 
-		console.log("newCashRegister", {
-			initialAmount,
-			changeAmount,
-			userId,
-			cashBoxId,
-			date: new Date()
-		});
-
 		const cashTerminal = await terminalRepository.getByDescription("EFECTIVO");
-		console.log("newCashRegister.id", newCashRegister.id);
-		console.log("cashTerminal.id", cashTerminal.id);
 		await cashRegisterTerminalsRepository.createAssociation(newCashRegister.id, cashTerminal.id);
 
-		console.log("newCashRegister", newCashRegister);
 		return newCashRegister;
 	} catch (error) {
 		throw error;
@@ -108,8 +95,6 @@ const update = async (cashRegisterId, cashRegisterData) => {
 		if (isClosed) {
 			cashRegister.isClosed = isClosed
 		}
-
-		// console.log(cashRegister);
 
 		await cashRegisterRepository.save(cashRegister);
 		return cashRegister;

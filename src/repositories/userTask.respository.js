@@ -93,11 +93,6 @@ const getAllByTaskSetNotClosed = async () => {
 	const userTasks = await UserTask.findAll({
 		include: [
 			{
-				model: Task,
-				required: true,
-				attributes: ['id', 'description', "type"],
-			},
-			{
 				model: User,
 				required: true,
 				attributes: ['id', 'firstName', 'lastName']
@@ -108,8 +103,15 @@ const getAllByTaskSetNotClosed = async () => {
 				where: {
 					isClosed: false
 				}
-			}
-		]
+			},
+		],
+		where: {
+			isActive: true,
+			shouldDo: true
+		},
+		attributes: {
+			exclude: ['updatedAt', 'taskId', 'userId', "order", "kilos", "createdAt", "taskSetId", "isOptional", "periodicity"]
+		},
 	})
 	return userTasks
 }

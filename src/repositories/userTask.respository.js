@@ -107,7 +107,6 @@ const getAllByTaskSetNotClosed = async () => {
 		],
 		where: {
 			isActive: true,
-			shouldDo: true
 		},
 		attributes: {
 			exclude: ['updatedAt', 'taskId', 'userId', "order", "kilos", "createdAt", "taskSetId", "isOptional", "periodicity"]

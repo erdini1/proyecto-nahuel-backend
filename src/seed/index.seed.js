@@ -1,9 +1,9 @@
 // import { User } from "../models/index.model.js"
-import { Task } from "../models/index.model.js"
-// import { UserTask } from "../models/index.model.js"
-import users from "./user.seed.js";
+// import { Task } from "../models/index.model.js"
+import { UserTask } from "../models/index.model.js"
+// import users from "./user.seed.js";
 import userTasks from "./userTask.seed.js";
-import tasks from "./task.seed.js";
+// import tasks from "./task.seed.js";
 import sequelize from "../config/db.config.js";
 
 const importData = async () => {

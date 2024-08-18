@@ -2,7 +2,7 @@ import express from "express"
 // import csrf from "csurf"
 // import cookieParser from "cookie-parser"
 import cors from "cors"
-import { BACKEND } from "./src/config/env-defaults.config.js"
+import { BACKEND, FRONTEND } from "./src/config/env-defaults.config.js"
 import sequelize from "./src/config/db.config.js"
 import indexRouter from "./src/routes/index.route.js"
 import { HTTP_STATUSES } from "./src/constants/http.constant.js"
@@ -19,7 +19,14 @@ const app = express()
 // // Habilitar CSRF (CROSS-SITE REQUEST FORGERY )
 // app.use(csrf({ cookie: true }))
 
-app.use(cors())
+const corsOptions = {
+	origin: FRONTEND.URL,
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	allowedHeaders: ['Content-Type', 'Authorization'],
+	credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json())
 
 try {

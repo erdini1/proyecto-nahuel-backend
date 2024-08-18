@@ -5,6 +5,11 @@ const create = async (cashBoxData) => {
 	return cashBox?.dataValues
 }
 
+const bulkCreate = async (cashBoxData) => {
+	const cashBox = await CashBox.bulkCreate(cashBoxData)
+	return cashBox
+}
+
 const getAll = async () => {
 	const cashBoxs = await CashBox.findAll({
 		order: [['description', 'ASC']]
@@ -23,6 +28,7 @@ const save = async (cashBox) => {
 
 export const cashBoxRepository = {
 	create,
+	bulkCreate,
 	save,
 	getAll,
 	getById,

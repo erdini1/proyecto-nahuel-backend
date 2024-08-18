@@ -14,6 +14,14 @@ const create = async (cashBoxData) => {
 	}
 }
 
+const bulkCreate = async (cashBoxData) => {
+	try {
+		return await cashBoxRepository.bulkCreate(cashBoxData);
+	} catch (error) {
+		throw error
+	}
+}
+
 const getAll = async () => {
 	try {
 		return await cashBoxRepository.getAll();
@@ -65,6 +73,7 @@ const deleteById = async (cashBoxId) => {
 
 export const cashBoxService = {
 	create,
+	bulkCreate,
 	getAll,
 	getById,
 	update,

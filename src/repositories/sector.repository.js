@@ -5,6 +5,11 @@ const create = async (sectorData) => {
 	return sector
 }
 
+const bulkCreate = async (sectorData) => {
+	const sector = await Sector.bulkCreate(sectorData)
+	return sector
+}
+
 const getAll = async () => {
 	const sectors = await Sector.findAll({
 		order: [['name', 'ASC']]
@@ -32,6 +37,7 @@ const save = async (sector) => {
 
 export const sectorRepository = {
 	create,
+	bulkCreate,
 	getAll,
 	getAllBySectorIds,
 	getById,

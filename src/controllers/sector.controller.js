@@ -10,6 +10,15 @@ const create = async (req, res, next) => {
 	}
 }
 
+const bulkCreate = async (req, res, next) => {
+	try {
+		const sector = await sectorService.bulkCreate(req.body);
+		res.status(HTTP_STATUSES.CREATED).json(sector);
+	} catch (error) {
+		next(error)
+	}
+}
+
 const getAll = async (req, res, next) => {
 	try {
 		const sectors = await sectorService.getAll();
@@ -39,6 +48,7 @@ const deleteSector = async (req, res, next) => {
 
 export const sectorController = {
 	create,
+	bulkCreate,
 	getAll,
 	update,
 	deleteSector

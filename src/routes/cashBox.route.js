@@ -6,6 +6,7 @@ const router = express.Router()
 
 router.post("/", isAdmin, cashBoxController.create)
 router.get("/", isCashier, cashBoxController.getAll)
+router.post("/bulk", isAdmin, cashBoxController.bulkCreate)
 router.get("/:cashBoxId", isAdmin, cashBoxController.getById)
 router.put("/:cashBoxId", isAdmin, cashBoxController.update)
 router.delete("/:cashBoxId", isAdmin, cashBoxController.deleteById)

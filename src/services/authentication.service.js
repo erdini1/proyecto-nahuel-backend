@@ -43,6 +43,10 @@ const create = async (userData) => {
 			role: role === ROLE.ADMIN ? ROLE.ADMIN : newRole,
 		});
 
+		if (role === ROLE.ADMIN) {
+			return newUser;
+		}
+
 		if (Sectors && Sectors.length > 0) {
 			const userSectorRecords = Sectors.map(sector => ({
 				userId: newUser.id,

@@ -6,6 +6,11 @@ export const BACKEND = {
 	URL: process.env.BACKEND_URL || "http://localhost"
 }
 
+// FRONTEND
+export const FRONTEND = {
+	URL: process.env.FRONTEND_URL || "http://localhost"
+}
+
 // DATABASE
 export const DB = {
 	DATABASE: process.env.DB_DATABASE || "mydb",

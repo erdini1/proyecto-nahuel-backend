@@ -10,6 +10,15 @@ const create = async (req, res, next) => {
 	}
 }
 
+const bulkCreate = async (req, res, next) => {
+	try {
+		const cashBox = await cashBoxService.bulkCreate(req.body);
+		res.status(HTTP_STATUSES.CREATED).json(cashBox);
+	} catch (error) {
+		next(error)
+	}
+}
+
 const getAll = async (req, res, next) => {
 	try {
 		const cashBoxs = await cashBoxService.getAll();
@@ -48,6 +57,7 @@ const deleteById = async (req, res, next) => {
 
 export const cashBoxController = {
 	create,
+	bulkCreate,
 	getAll,
 	getById,
 	update,

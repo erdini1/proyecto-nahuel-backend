@@ -11,6 +11,14 @@ const create = async (sectorData) => {
 	}
 }
 
+const bulkCreate = async (sectorData) => {
+	try {
+		return await sectorRepository.bulkCreate(sectorData);
+	} catch (error) {
+		throw error;
+	}
+}
+
 const getAll = async () => {
 	try {
 		const sectors = await sectorRepository.getAll();
@@ -51,6 +59,7 @@ const deleteSector = async (sectorId) => {
 
 export const sectorService = {
 	create,
+	bulkCreate,
 	getAll,
 	update,
 	deleteSector

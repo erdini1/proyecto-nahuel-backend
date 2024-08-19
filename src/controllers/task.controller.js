@@ -54,11 +54,21 @@ const deleteTask = async (req, res, next) => {
 	}
 }
 
+const deleteTasks = async (req, res, next) => {
+	try {
+		await taskService.deleteTasks(req.body);
+		res.status(HTTP_STATUSES.NO_CONTENT).json({ message: "Tasks deleted" });
+	} catch (error) {
+		next(error)
+	}
+}
+
 export const taskController = {
 	create,
 	bulkCreate,
 	getAll,
 	update,
 	getById,
-	deleteTask
+	deleteTask,
+	deleteTasks
 }

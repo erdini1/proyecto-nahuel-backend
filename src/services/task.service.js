@@ -112,11 +112,20 @@ const deleteTask = async (taskId) => {
 	}
 }
 
+const deleteTasks = async (taskIds) => {
+	try {
+		await taskRepository.deleteTasks(taskIds);
+	} catch (error) {
+		throw error
+	}
+}
+
 export const taskService = {
 	create,
 	bulkCreate,
 	getAll,
 	update,
 	getById,
-	deleteTask
+	deleteTask,
+	deleteTasks,
 };

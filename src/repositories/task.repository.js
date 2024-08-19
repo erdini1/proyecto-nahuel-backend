@@ -53,6 +53,15 @@ const deleteTask = async (taskId) => {
 	})
 }
 
+// Eliminar masivamente
+const deleteTasks = async (taskIds) => {
+	await Task.destroy({
+		where: {
+			id: taskIds
+		}
+	})
+}
+
 export const taskRepository = {
 	create,
 	bulkCreate,
@@ -60,5 +69,6 @@ export const taskRepository = {
 	getAll,
 	getById,
 	getByDescription,
-	deleteTask
+	deleteTask,
+	deleteTasks
 }

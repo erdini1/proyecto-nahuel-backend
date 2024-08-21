@@ -26,18 +26,24 @@ const getLastestById = async (userId) => {
 
 const update = async (userId, taskSetData) => {
 	try {
-		const { shift, observations, isClosed } = taskSetData
-		const taskSet = await taskSetRepository.getLastestById(userId)
-		if (!taskSet) throw new ApiError("El conjunto de tareas no existe", HTTP_STATUSES.NOT_FOUND)
+		const { shift, observations, isClosed } = taskSetData;
+		const taskSet = await taskSetRepository.getLastestById(userId);
+		if (!taskSet) throw new ApiError("El conjunto de tareas no existe", HTTP_STATUSES.NOT_FOUND);
 
-		taskSet.shift = shift || taskSet.shift
-		taskSet.observations = observations || taskSet.observations
-		taskSet.isClosed = isClosed || taskSet.isClosed
+		taskSet.shift = shift || taskSet.shift;
+		taskSet.observations = observations || taskSet.observations;
+		taskSet.isClosed = isClosed || taskSet.isClosed;
 
 		if (isClosed) {
-			const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id)
-			const userTasksActiveAndRecurring = userTasks.filter(userTask => userTask.periodicity === "recurring" && userTask.isActive)
-			const newTaskSet = await taskSetRepository.create({ userId, shift: "" })
+			const userTasks = await userTaskRepository.getByUserIdAndTaskSet(userId, taskSet.id);
+			const userTasksActiveAndRecurring = userTasks.filter(userTask => userTask.periodicity === "recurring" && userTask.isActive);
+
+			const currentTaskOrder = userTasksActiveAndRecurring.map(userTask => ({
+				taskId: userTask.Task.id,
+				order: userTask.order
+			}));
+
+			const newTaskSet = await taskSetRepository.create({ userId, shift: "" });
 
 			const checklistItems = userTasksActiveAndRecurring.map(userTask => ({
 				taskId: userTask.Task.id,
@@ -45,14 +51,16 @@ const update = async (userId, taskSetData) => {
 				userId,
 				taskSetId: newTaskSet.id,
 				isOptional: userTask.isOptional,
-			}))
-			await userTaskRepository.createMany(checklistItems)
+				order: currentTaskOrder.find(order => order.taskId === userTask.Task.id)?.order || 0
+			}));
+
+			await userTaskRepository.createMany(checklistItems);
 		}
-		await taskSetRepository.save(taskSet)
+		await taskSetRepository.save(taskSet);
 	} catch (error) {
-		throw error
+		throw error;
 	}
-}
+};
 
 export const taskSetService = {
 	create,

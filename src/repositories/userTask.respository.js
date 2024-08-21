@@ -201,7 +201,7 @@ const getByTaskSetId = async (taskSetId) => {
 		attributes: {
 			exclude: ['updatedAt', 'taskId', 'userId', 'taskSetId']
 		},
-		order: [['createdAt', 'ASC']]
+		order: [['order', 'ASC']]
 	})
 	return userTasks
 }

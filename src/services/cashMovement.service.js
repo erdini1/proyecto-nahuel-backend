@@ -35,6 +35,23 @@ const getAll = async () => {
 	}
 };
 
+const getAllWithdrawals = async (query) => {
+	try {
+		const { page } = query;
+		return await cashMovementRepository.getAllWithdrawals(page);
+	} catch (error) {
+		throw error
+	}
+};
+
+const getWithdrawalsSummary = async () => {
+	try {
+		return await cashMovementRepository.getWithdrawalsSummary();
+	} catch (error) {
+		throw error
+	}
+}
+
 const getById = async (cashMovementId) => {
 	try {
 		const cashMovement = await cashMovementRepository.getById(cashMovementId);
@@ -88,6 +105,8 @@ const deleteById = async (cashMovementId) => {
 export const cashMovementService = {
 	create,
 	getAll,
+	getAllWithdrawals,
+	getWithdrawalsSummary,
 	getById,
 	update,
 	getByUserId,

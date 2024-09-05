@@ -1,3 +1,4 @@
+import { Op } from 'sequelize'
 import sequelize from '../config/db.config.js'
 import { CashRegister, Provider, CashMovement, User, CashBox } from '../models/index.model.js'
 
@@ -30,12 +31,20 @@ const getAll = async () => {
 	return cashMovements
 }
 
-const getAllWithdrawals = async (page = 1, itemsPerPage = 10) => {
+const getAllWithdrawals = async (page = 1, itemsPerPage = 10, filters = {}) => {
 	const offset = (page - 1) * itemsPerPage;
+	const { providerName, cashBoxIdsArray, dateFrom, dateTo } = filters;
 
 	const cashMovements = await CashMovement.findAndCountAll({
 		limit: itemsPerPage,
 		offset: offset,
+		where: {
+			...(dateFrom && dateTo && dateFrom !== '' && dateTo !== '' && {
+				'$CashRegister.date$': {
+					[Op.between]: [new Date(dateFrom), new Date(dateTo)]
+				}
+			})
+		},
 		include: [
 			{
 				model: CashRegister,
@@ -50,14 +59,24 @@ const getAllWithdrawals = async (page = 1, itemsPerPage = 10) => {
 					{
 						model: CashBox,
 						required: true,
-						attributes: ['id', 'description']
+						attributes: ['id', 'description'],
+						where: {
+							...(Array.isArray(cashBoxIdsArray) && cashBoxIdsArray.length > 0 && {
+								id: { [Op.in]: cashBoxIdsArray }
+							})
+						}
 					}
 				]
 			},
 			{
 				model: Provider,
 				required: true,
-				attributes: ['name']
+				attributes: ['name'],
+				where: {
+					...(providerName && providerName.trim() !== '' && {
+						name: { [Op.like]: `%${providerName}%` }
+					})
+				}
 			}
 		],
 		attributes: {
@@ -67,24 +86,61 @@ const getAllWithdrawals = async (page = 1, itemsPerPage = 10) => {
 	});
 
 	return cashMovements;
-}
-
-const getWithdrawalsSummary = async () => {
-	try {
-		const result = await CashMovement.findOne({
-			attributes: [
-				[sequelize.fn('SUM', sequelize.col('amount')), 'totalAmount']
-			],
-			raw: true
-		});
-		return result.totalAmount || 0;
-	} catch (error) {
-		console.error('Error al obtener el resumen de retiros:', error);
-		throw error;
-	}
 };
 
+const getWithdrawalsSummary = async (filters = {}) => {
+	const { providerName, cashBoxIdsArray, dateFrom, dateTo } = filters;
 
+	const total = await CashMovement.findOne({
+		attributes: [
+			[sequelize.fn('SUM', sequelize.col('amount')), 'totalAmount']
+		],
+		where: {
+			...(dateFrom && dateTo && dateFrom !== '' && dateTo !== '' && {
+				'$CashRegister.date$': {
+					[Op.between]: [new Date(dateFrom), new Date(dateTo)]
+				}
+			})
+		},
+		include: [
+			{
+				model: CashRegister,
+				required: true,
+				attributes: [],
+				include: [
+					{
+						model: User,
+						required: true,
+						attributes: []
+					},
+					{
+						model: CashBox,
+						required: true,
+						attributes: [],
+						where: {
+							...(Array.isArray(cashBoxIdsArray) && cashBoxIdsArray.length > 0 && {
+								id: { [Op.in]: cashBoxIdsArray }
+							})
+						}
+					}
+				]
+			},
+			{
+				model: Provider,
+				required: true,
+				attributes: [],
+				where: {
+					...(providerName && providerName.trim() !== '' && {
+						name: { [Op.like]: `%${providerName}%` }
+					})
+				}
+			}
+		],
+		raw: true
+	});
+
+	return total.totalAmount || 0;
+}
 
 const getById = async (cashMovementId) => {
 	const cashMovement = await CashMovement.findByPk(cashMovementId, {

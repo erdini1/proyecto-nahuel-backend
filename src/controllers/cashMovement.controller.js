@@ -30,7 +30,7 @@ const getAllWithdrawals = async (req, res, next) => {
 
 const getWithdrawalsSummary = async (req, res, next) => {
 	try {
-		const summary = await cashMovementService.getWithdrawalsSummary();
+		const summary = await cashMovementService.getWithdrawalsSummary(req.query);
 		res.status(HTTP_STATUSES.OK).json(summary);
 	} catch (error) {
 		next(error)

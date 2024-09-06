@@ -11,8 +11,11 @@ const create = async (userId, cashRegisterData) => {
 		const {
 			initialAmount,
 			changeAmount,
+			supplierIncome,
 			cashBoxId,
 		} = cashRegisterData;
+
+		console.log("supplierIncome", supplierIncome);
 
 		const user = await userRepository.getById(userId);
 		if (!user) throw new ApiError("El usuario no existe", HTTP_STATUSES.NOT_FOUND);
@@ -20,6 +23,7 @@ const create = async (userId, cashRegisterData) => {
 		const newCashRegister = await cashRegisterRepository.create({
 			initialAmount,
 			changeAmount,
+			supplierIncome,
 			userId,
 			cashBoxId,
 			date: new Date()
@@ -58,6 +62,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 		const {
 			initialAmount,
 			changeAmount,
+			supplierIncome,
 			observations,
 			salesWithCash,
 			salesWithCards,
@@ -79,6 +84,7 @@ const update = async (cashRegisterId, cashRegisterData) => {
 
 		cashRegister.initialAmount = initialAmount || cashRegister.initialAmount;
 		cashRegister.changeAmount = changeAmount || cashRegister.changeAmount;
+		cashRegister.supplierIncome = supplierIncome || cashRegister.supplierIncome;
 		cashRegister.observations = observations || cashRegister.observations;
 		cashRegister.salesWithCash = salesWithCash || cashRegister.salesWithCash;
 		cashRegister.salesWithCards = salesWithCards || cashRegister.salesWithCards;

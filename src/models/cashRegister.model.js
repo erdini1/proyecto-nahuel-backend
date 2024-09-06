@@ -15,6 +15,10 @@ const CashRegister = sequelize.define("CashRegister", {
 		type: DataTypes.DECIMAL(10, 2),
 		allowNull: true,
 	},
+	supplierIncome: {
+		type: DataTypes.DECIMAL(10, 2),
+		allowNull: true,
+	},
 	observations: {
 		type: DataTypes.STRING,
 		allowNull: true,

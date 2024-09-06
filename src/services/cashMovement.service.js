@@ -35,6 +35,42 @@ const getAll = async () => {
 	}
 };
 
+const getAllWithdrawals = async (query) => {
+	try {
+		const { page = 1, providerName, cashBoxIds, dateFrom, dateTo } = query;
+		const cashBoxIdsArray = cashBoxIds ? cashBoxIds.split(',').map(Number) : null;
+
+		const filters = {
+			providerName: providerName || null,
+			cashBoxIdsArray: Array.isArray(cashBoxIdsArray) ? cashBoxIdsArray : null,
+			dateFrom: dateFrom === "null" ? null : dateFrom,
+			dateTo: dateTo === "null" ? null : dateTo,
+		};
+
+		return await cashMovementRepository.getAllWithdrawals(page, 10, filters);
+	} catch (error) {
+		throw error;
+	}
+};
+
+const getWithdrawalsSummary = async (query) => {
+	try {
+		const { providerName, cashBoxIds, dateFrom, dateTo } = query;
+		const cashBoxIdsArray = cashBoxIds ? cashBoxIds.split(',').map(Number) : null;
+
+		const filters = {
+			providerName: providerName || null,
+			cashBoxIdsArray: Array.isArray(cashBoxIdsArray) ? cashBoxIdsArray : null,
+			dateFrom: dateFrom === "null" ? null : dateFrom,
+			dateTo: dateTo === "null" ? null : dateTo,
+		};
+
+		return await cashMovementRepository.getWithdrawalsSummary(filters);
+	} catch (error) {
+		throw error
+	}
+}
+
 const getById = async (cashMovementId) => {
 	try {
 		const cashMovement = await cashMovementRepository.getById(cashMovementId);
@@ -88,6 +124,8 @@ const deleteById = async (cashMovementId) => {
 export const cashMovementService = {
 	create,
 	getAll,
+	getAllWithdrawals,
+	getWithdrawalsSummary,
 	getById,
 	update,
 	getByUserId,

@@ -19,6 +19,24 @@ const getAll = async (req, res, next) => {
 	}
 }
 
+const getAllWithdrawals = async (req, res, next) => {
+	try {
+		const cashMovements = await cashMovementService.getAllWithdrawals(req.query);
+		res.status(HTTP_STATUSES.OK).json(cashMovements);
+	} catch (error) {
+		next(error)
+	}
+}
+
+const getWithdrawalsSummary = async (req, res, next) => {
+	try {
+		const summary = await cashMovementService.getWithdrawalsSummary(req.query);
+		res.status(HTTP_STATUSES.OK).json(summary);
+	} catch (error) {
+		next(error)
+	}
+}
+
 const getById = async (req, res, next) => {
 	try {
 		const cashMovement = await cashMovementService.getById(req.params.cashMovementId);
@@ -58,6 +76,8 @@ const deleteById = async (req, res, next) => {
 export const cashMovementController = {
 	create,
 	getAll,
+	getAllWithdrawals,
+	getWithdrawalsSummary,
 	getById,
 	update,
 	getByUserId,
